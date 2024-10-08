@@ -33,8 +33,7 @@ resource "aws_secretsmanager_secret" "configuration" {
         Effect = "Allow",
         Action = "secretsmanager:GetSecretValue",
         Principal = {
-          Type        = "AWS",
-          Identifiers = [format("arn:aws:iam::%s:root", local.account_id)]
+          AWS = format("arn:aws:iam::%s:root", local.account_id)
         },
         Resource = "*"
       }
