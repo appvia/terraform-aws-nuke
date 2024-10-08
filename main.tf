@@ -44,6 +44,10 @@ resource "aws_secretsmanager_secret" "configuration" {
   policy                  = data.aws_iam_policy_document.secrets_manager.json
   recovery_window_in_days = 0
   tags                    = var.tags
+
+  depends_on = [
+    aws_iam_role.execution,
+  ]
 }
 
 ## Provision a secret version for the configuration
