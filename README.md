@@ -125,6 +125,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Description |
 |------|-------------|
+| <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | The KMS key ID used for the nuke service, if created |
 | <a name="output_parameter_store_arn"></a> [parameter\_store\_arn](#output\_parameter\_store\_arn) | The ARN of the parameter store containing the nuke configuration |
 | <a name="output_private_subnet_id_by_az"></a> [private\_subnet\_id\_by\_az](#output\_private\_subnet\_id\_by\_az) | The private subnets to use for the nuke service |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The VPC where the nuke service is running |
