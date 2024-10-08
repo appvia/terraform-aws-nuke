@@ -1,23 +1,24 @@
 
 ## Provision a events IAM role, this is used within the cloudwatch trigger, 
 ## permitting the event to trigger the ECS task
-data "aws_iam_policy_document" "cloudwatch" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
-  }
-}
 
 ## Provision the ECS events IAM role, which is used to trigger the ECS task
 resource "aws_iam_role" "cloudwatch" {
-  assume_role_policy = data.aws_iam_policy_document.cloudwatch.json
-  name               = format("events-%s", local.name)
-  tags               = var.tags
+  name = format("events-%s", local.name)
+  tags = var.tags
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
 ## Attach the ECS events policy to the role 

@@ -17,33 +17,29 @@ module "kms" {
   tags                    = merge(var.tags, { "Name" = var.kms_key_alias })
 }
 
-## Craft a IAM policy document that permission the ecs task to retrieve 
-## the secret from secrets manager 
-data "aws_iam_policy_document" "secrets_manager" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "secretsmanager:GetSecretValue",
-    ]
-    principals {
-      type        = "AWS"
-      identifiers = [format("arn:aws:iam::%s:root", local.account_id)]
-    }
-    resources = [
-      format("arn:aws:secretsmanager:%s:%s:secret:%s", local.region, local.account_id, local.secret_name),
-    ]
-  }
-}
-
 ## Place the configuration within the parameter store for the ecs task to access 
 # trivy:ignore:AVD-AWS-0017
 # tfsec:ignore:aws-ssm-secret-use-customer-key
 resource "aws_secretsmanager_secret" "configuration" {
   description             = format("Contains the configuration yaml for the aws-nuke task for %s", local.name)
   name                    = local.secret_name
-  policy                  = data.aws_iam_policy_document.secrets_manager.json
   recovery_window_in_days = 0
   tags                    = var.tags
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = "secretsmanager:GetSecretValue",
+        Principal = {
+          Type        = "AWS",
+          Identifiers = [format("arn:aws:iam::%s:root", local.account_id)]
+        },
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 ## Provision a secret version for the configuration

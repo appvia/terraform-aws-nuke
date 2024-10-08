@@ -1,33 +1,44 @@
-## Craft a policy document allowing the ECS task to assume the role, and execute within 
-## the ECS cluster
-data "aws_iam_policy_document" "ecs_assume" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
-    }
-  }
-}
-
 ## Provision the IAM role for the ECS task: these are the permissions granted to the 
 ## task to operate under
 resource "aws_iam_role" "task" {
-  assume_role_policy   = data.aws_iam_policy_document.ecs_assume.json
   description          = "Used by the ECS task to perform actions and remove resources, as part of the nuke service"
   name                 = local.name
   permissions_boundary = var.task_role_permissions_boundary_arn
   tags                 = var.tags
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
 ## Provision the ECS execution IAM role; this is used by the task to execute within 
 ## the ECS cluster
 resource "aws_iam_role" "execution" {
-  assume_role_policy = data.aws_iam_policy_document.ecs_assume.json
-  description        = "Used by the ECS task to execute within the ECS cluster by the nuke service"
-  name               = format("execution-%s", local.name)
-  tags               = var.tags
+  description = "Used by the ECS task to execute within the ECS cluster by the nuke service"
+  name        = format("execution-%s", local.name)
+  tags        = var.tags
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
 ## Allow any additional permissions to be attached to the task role - these are inline 
