@@ -70,29 +70,23 @@ resource "aws_iam_role_policy_attachment" "execution" {
   role       = aws_iam_role.execution.name
 }
 
-## Craft a policy document allowing the ECS task to retrieve the secret from the secrets manager
-data "aws_iam_policy_document" "execution_permissions" {
-  statement {
-    sid    = "AllowSecretsManager"
-    effect = "Allow"
-    actions = [
-      "secretsmanager:DescribeSecret",
-      "secretsmanager:GetSecretValue",
-    ]
-    resources = [
-      aws_secretsmanager_secret.configuration.arn,
-    ]
-  }
-}
 
 ## Allow the ECS task to retrieve the secret from the secrets manager 
 resource "aws_iam_role_policy" "execution_secrets" {
-  name   = "allow-sm-configuration"
-  role   = aws_iam_role.execution.name
-  policy = data.aws_iam_policy_document.execution_permissions.json
+  name = "allow-sm-configuration"
+  role = aws_iam_role.execution.name
 
-  depends_on = [
-    aws_secretsmanager_secret.configuration,
-  ]
+  policy = jsondecode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Effect   = "Allow",
+        Resource = aws_secretsmanager_secret.configuration.arn
+      }
+    ]
+  })
 }
 
