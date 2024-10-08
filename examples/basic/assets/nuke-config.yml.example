@@ -4,7 +4,7 @@ blocklist:
 
 regions:
   - global
-  - eu-west-2
+  - ${region}
 
 resource-types:
   includes:
@@ -401,7 +401,8 @@ presets:
           value: "^CID-DC.*"
 
 accounts:
-  503440911135:
+  ## Provided to the template function
+  ${account_id}:
     presets:
       - cloud-intelligence
       - control-tower

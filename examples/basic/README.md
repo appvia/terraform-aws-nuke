@@ -12,7 +12,9 @@ No providers.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_nuke"></a> [nuke](#module\_nuke) | ../../ | n/a |
 
 ## Resources
 
@@ -24,5 +26,7 @@ No inputs.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_parameter_store_arn"></a> [parameter\_store\_arn](#output\_parameter\_store\_arn) | The ARN of the parameter store containing the nuke configuration |
 <!-- END_TF_DOCS -->

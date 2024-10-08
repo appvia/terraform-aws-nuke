@@ -1,21 +1,45 @@
 ![Github Actions](../../actions/workflows/terraform.yml/badge.svg)
 
-# Terraform <NAME>
+# Terraform Nuke Module
 
 ## Description
 
-Add a description of the module here
+The purpose of this module is to provide a method of automated cleanup of resources, using the [aws-nuke](https://ekristen.github.io/aws-nuke/) tool. This module will create a scheduled task that will run an ECS task on a regular basis to clean up resources that are no longer needed.
+
+It is intended to be used in a non-production environment, such as a development or testing account, to ensure that resources are not left running and incurring costs when they are no longer needed.
 
 ## Usage
 
-Add example usage here
+The following provides an example of how to use this module:
 
 ```hcl
-module "example" {
-  source  = "appvia/<NAME>/aws"
-  version = "0.0.1"
+module "nuke" {
+  source = "github.com/appvia/terraform-aws-nuke?ref=main"
 
-  # insert variables here
+  ## Indicates if we should create a KMS key for the log group
+  create_kms_key = false
+  ## Indicates if the schedule is enabled
+  enabled        = true
+  ## This is the location of the aws-nuke configuration file, this is
+  ## copied into the container via a parameter store value
+  nuke_configuration = file("${path.module}/assets/nuke-config.yml.example")
+  ## This will create a task that runs every day at midnight
+  schedule_expression = "cron(0 0 * * ? *)"
+  ## The tags to apply to resources created by this module
+  tags = {
+    "Environment" = "Testing"
+    "GitRepo"     = "https://github.com/appvia/terraform-aws-nuke"
+    "Owner"       = "Testing"
+    "Product"     = "Terraform AWS Nuke"
+  }
+  ## This will create an VPC called 'nuke' with 2 availability zones
+  ## and a private netmask of 28
+  network = {
+    name               = "nuke"
+    availability_zones = 2
+    private_netmask    = 28
+    vpc_cidr           = "172.16.0.0/25"
+  }
 }
 ```
 
@@ -91,7 +115,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_log_group_kms_key_id"></a> [log\_group\_kms\_key\_id](#input\_log\_group\_kms\_key\_id) | The KMS key id to use for encrypting the log group | `string` | `null` | no |
 | <a name="input_log_group_name"></a> [log\_group\_name](#input\_log\_group\_name) | The name of the log group to create | `string` | `"nuke"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The number of days to retain logs for | `number` | `7` | no |
-| <a name="input_network"></a> [network](#input\_network) | The network to use for the endpoints and optinal resolvers | <pre>object({<br/>    availability_zones = optional(number, 2)<br/>    # Indicates if we should create a new network or reuse an existing one<br/>    enable_default_route_table_association = optional(bool, true)<br/>    # Whether to associate the default route table  <br/>    enable_default_route_table_propagation = optional(bool, true)<br/>    # Whether to propagate the default route table<br/>    ipam_pool_id = optional(string, null)<br/>    # The id of the ipam pool to use when creating the network<br/>    name = optional(string, "nuke")<br/>    # The name of the network to create<br/>    private_netmask = optional(number, 28)<br/>    # The ids of the private subnets to if we are reusing an existing network<br/>    transit_gateway_id = optional(string, "")<br/>    ## The transit gateway id to use for the network<br/>    vpc_cidr = optional(string, "")<br/>    # The vpc id to use when reusing an existing network <br/>    vpc_netmask = optional(number, null)<br/>    # When using ipam this the netmask to use for the VPC<br/>  })</pre> | `null` | no |
+| <a name="input_network"></a> [network](#input\_network) | The network to use for the endpoints and optinal resolvers | <pre>object({<br/>    availability_zones = optional(number, 2)<br/>    # The id of the ipam pool to use when creating the network<br/>    name = optional(string, "nuke")<br/>    # The name of the network to create<br/>    private_netmask = optional(number, 28)<br/>    ## The transit gateway id to use for the network<br/>    vpc_cidr = optional(string, "")<br/>    # The vpc id to use when reusing an existing network <br/>  })</pre> | `null` | no |
 | <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression to use for the event rule | `string` | `"cron(0 0 * * ? *)"` | no |
 | <a name="input_task_role_additional_policies"></a> [task\_role\_additional\_policies](#input\_task\_role\_additional\_policies) | A map of inline policies to attach to the IAM role | <pre>map(object({<br/>    policy = string<br/>  }))</pre> | `null` | no |
 | <a name="input_task_role_permissions_arns"></a> [task\_role\_permissions\_arns](#input\_task\_role\_permissions\_arns) | A list of permissions to attach to the IAM role | `list(string)` | <pre>[<br/>  "arn:aws:iam::aws:policy/AdministratorAccess"<br/>]</pre> | no |
@@ -101,6 +125,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Description |
 |------|-------------|
+| <a name="output_parameter_store_arn"></a> [parameter\_store\_arn](#output\_parameter\_store\_arn) | The ARN of the parameter store containing the nuke configuration |
 | <a name="output_private_subnet_id_by_az"></a> [private\_subnet\_id\_by\_az](#output\_private\_subnet\_id\_by\_az) | The private subnets to use for the nuke service |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The VPC where the nuke service is running |
 <!-- END_TF_DOCS -->

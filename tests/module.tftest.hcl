@@ -19,7 +19,7 @@ run "basic" {
       vpc_cidr           = "10.90.0.0/21"
       transit_gateway_id = "tgw-04ad8f026be8b7eb6"
     }
-    nuke_configuration = "./assets/nuke-config.yml.example"
+    nuke_configuration = "./examples/basic/assets/nuke-config.yml.example"
     tags = {
       "Environment" = "Testing"
       "GitRepo"     = "https://github.com/appvia/terraform-aws-dns"

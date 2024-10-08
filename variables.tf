@@ -113,23 +113,13 @@ variable "network" {
   description = "The network to use for the endpoints and optinal resolvers"
   type = object({
     availability_zones = optional(number, 2)
-    # Indicates if we should create a new network or reuse an existing one
-    enable_default_route_table_association = optional(bool, true)
-    # Whether to associate the default route table  
-    enable_default_route_table_propagation = optional(bool, true)
-    # Whether to propagate the default route table
-    ipam_pool_id = optional(string, null)
     # The id of the ipam pool to use when creating the network
     name = optional(string, "nuke")
     # The name of the network to create
     private_netmask = optional(number, 28)
-    # The ids of the private subnets to if we are reusing an existing network
-    transit_gateway_id = optional(string, "")
     ## The transit gateway id to use for the network
     vpc_cidr = optional(string, "")
     # The vpc id to use when reusing an existing network 
-    vpc_netmask = optional(number, null)
-    # When using ipam this the netmask to use for the VPC
   })
   default = null
 }
