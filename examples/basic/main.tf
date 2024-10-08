@@ -13,6 +13,9 @@ locals {
   }
 }
 
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "vpc" {
   source  = "appvia/network/aws"
   version = "0.3.2"
@@ -30,6 +33,8 @@ module "vpc" {
 module "nuke" {
   source = "../../"
 
+  ## The account id we are running in
+  account_id = data.aws_caller_identity.current.account_id
   ## Indicates if the KMS key should be created for the log group 
   create_kms_key = false
   ## Indicates if we should skips deletion (default is false)
@@ -37,6 +42,8 @@ module "nuke" {
   ## This is the location of the aws-nuke configuration file, this is 
   ## copied into the container via a parameter store value
   nuke_configuration = "${path.module}/assets/nuke-config.yml.example"
+  ## The region to use for the resources 
+  region = data.aws_region.current.name
   ## This will create a task that runs every day at midnight
   schedule_expression = "cron(0 0 * * ? *)"
   ## Name of the secret (AWS Secrets Manager) to store the configuration in 

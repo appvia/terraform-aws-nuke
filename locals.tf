@@ -1,9 +1,9 @@
 
 locals {
   ## The local account id
-  account_id = data.aws_caller_identity.current.account_id
+  account_id = var.account_id
   ## The region the resources are being provisioned in
-  region = data.aws_region.current.name
+  region = var.region
   ## Is the unique identifier for resources created by this module 
   name = var.name
   ## Is the key administrator role or principal for any KMS key provisioned

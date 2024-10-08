@@ -5,6 +5,16 @@ variable "name" {
   default     = "nuke-service"
 }
 
+variable "account_id" {
+  description = "The account id to use for the resources"
+  type        = string
+}
+
+variable "region" {
+  description = "The region to use for the resources"
+  type        = string
+}
+
 variable "create_kms_key" {
   description = "Indicates if a KMS key should be created for the log group"
   type        = bool
