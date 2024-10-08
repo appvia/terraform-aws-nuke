@@ -76,7 +76,7 @@ resource "aws_iam_role_policy" "execution_secrets" {
   name = "allow-sm-configuration"
   role = aws_iam_role.execution.name
 
-  policy = jsondecode({
+  policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
