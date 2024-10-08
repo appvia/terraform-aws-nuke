@@ -80,11 +80,12 @@ resource "aws_iam_role_policy" "execution_secrets" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action = [
-          "secretsmanager:GetSecretValue"
-        ],
-        Effect   = "Allow",
-        Resource = aws_secretsmanager_secret.configuration.arn
+        Sid    = "AllowSecretsManager",
+        Action = ["secretsmanager:GetSecretValue"],
+        Effect = "Allow",
+        Resource = [
+          aws_secretsmanager_secret.configuration.arn
+        ]
       }
     ]
   })
