@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "secrets_manager" {
     ]
     principals {
       type        = "AWS"
-      identifiers = [aws_iam_role.execution.arn]
+      identifiers = [format("arn:aws:iam::%s:root", local.account_id)]
     }
     resources = [
       format("arn:aws:secretsmanager:%s:%s:secret:%s", local.region, local.account_id, local.secret_name),
@@ -44,10 +44,6 @@ resource "aws_secretsmanager_secret" "configuration" {
   policy                  = data.aws_iam_policy_document.secrets_manager.json
   recovery_window_in_days = 0
   tags                    = var.tags
-
-  depends_on = [
-    aws_iam_role.execution,
-  ]
 }
 
 ## Provision a secret version for the configuration

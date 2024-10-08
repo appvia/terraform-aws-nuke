@@ -110,7 +110,7 @@ variable "task_role_additional_policies" {
   type = map(object({
     policy = string
   }))
-  default = null
+  default = {}
 }
 
 variable "schedule_expression" {
