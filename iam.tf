@@ -11,34 +11,14 @@ data "aws_iam_policy_document" "ecs_assume" {
   }
 }
 
-data "aws_iam_policy_document" "task_configuration" {
-  ## Allow the ECS task to retrieve the parameters from the parameter store 
-  statement {
-    sid    = "AllowSSMConfiguration"
-    effect = "Allow"
-    actions = [
-      "ssm:GetParameter",
-      "ssm:GetParameters"
-    ]
-    resources = [aws_ssm_parameter.configuration.arn]
-  }
-}
-
 ## Provision the IAM role for the ECS task: these are the permissions granted to the 
 ## task to operate under
 resource "aws_iam_role" "task" {
-  assume_role_policy   = jsonencode(data.aws_iam_policy_document.ecs_assume)
+  assume_role_policy   = data.aws_iam_policy_document.ecs_assume.json
   description          = "Used by the ECS task to perform actions and remove resources, as part of the nuke service"
   name                 = local.name
   permissions_boundary = var.task_role_permissions_boundary_arn
   tags                 = var.tags
-}
-
-## Allow the task access to the parameter store, to retrieve the configuration
-resource "aws_iam_role_policy" "task_configuration" {
-  name   = "allow-ssm-configuration"
-  role   = aws_iam_role.task.name
-  policy = data.aws_iam_policy_document.task_configuration.json
 }
 
 ## Allow any additional permissions to be attached to the task role - these are inline 
@@ -60,13 +40,34 @@ resource "aws_iam_role_policy_attachment" "task_permissions" {
   policy_arn = each.value
 }
 
+## Craft a policy document allowing the ECS task to retrieve the secret from the secrets manager
+data "aws_iam_policy_document" "execution_permissions" {
+  statement {
+    sid    = "AllowSecretsManager"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+    ]
+    resources = [
+      aws_secretsmanager_secret.configuration.arn,
+    ]
+  }
+}
 
 ## Provision the ECS execution IAM role; this is used by the task to execute within 
 ## the ECS cluster
 resource "aws_iam_role" "execution" {
-  assume_role_policy = jsonencode(data.aws_iam_policy_document.ecs_assume)
+  assume_role_policy = data.aws_iam_policy_document.ecs_assume.json
   name               = format("execution-%s", local.name)
   tags               = var.tags
+}
+
+## Allow the ECS task to retrieve the secret from the secrets manager 
+resource "aws_iam_role_policy" "execution_secrets" {
+  name   = "allow-sm-configuration"
+  role   = aws_iam_role.execution.name
+  policy = data.aws_iam_policy_document.execution_permissions.json
 }
 
 ## Assign the IAM permissions to the execution role, allowing the operate within the ECS cluster 

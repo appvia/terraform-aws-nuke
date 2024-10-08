@@ -86,10 +86,6 @@ resource-types:
     - EC2VPNGatewayAttachment
     - EC2Volume
     - ECRRepository
-    - ECSCluster
-    - ECSClusterInstance
-    - ECSService
-    - ECSTaskDefinition
     - EFSFileSystem
     - EFSMountTarget
     - EKSCluster
@@ -276,6 +272,10 @@ resource-types:
     - EC2DHCPOption
     - EC2NetworkACL
     - EC2NetworkInterface
+    - ECSCluster  # Doesn't appear to support tags 
+    - ECSClusterInstance # Doesn't appear to support tags 
+    - ECSService # Doesn't appear to support tags 
+    - ECSTaskDefinition # Doesn't appear to support tags
     - FMSNotificationChannel
     - FMSPolicy
     - MachineLearningBranchPrediction
@@ -310,9 +310,12 @@ presets:
         - property: logGroupName
           type: contains
           value: "AWSAccelerator"
-        - property: Name
-          type: contains
-          value: "lza-"
+        - property: logGroupName
+          type: regex
+          value: "^lza-"
+        - property: logGroupName
+          type: regex
+          value: "^/lza-"
       IAMInstanceProfile:
         - property: Name
           type: regex

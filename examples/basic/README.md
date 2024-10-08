@@ -15,6 +15,7 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_nuke"></a> [nuke](#module\_nuke) | ../../ | n/a |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | appvia/network/aws | 0.3.2 |
 
 ## Resources
 
@@ -28,5 +29,6 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_parameter_store_arn"></a> [parameter\_store\_arn](#output\_parameter\_store\_arn) | The ARN of the parameter store containing the nuke configuration |
+| <a name="output_secret_arn"></a> [secret\_arn](#output\_secret\_arn) | The ARN of the secret containing the nuke configuration |
+| <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | The subnet id's to use for the nuke service |
 <!-- END_TF_DOCS -->

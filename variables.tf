@@ -5,10 +5,10 @@ variable "create_kms_key" {
   default     = false
 }
 
-variable "enabled" {
-  description = "Indicates the scheduled task should be enabled, else we cofingure the task to be disabled"
+variable "enable_deletion" {
+  description = "Indicates the scheduled task will dry-run, log and report but not delete resources"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "kms_key_alias" {
@@ -58,23 +58,21 @@ variable "enable_container_insights" {
   default     = false
 }
 
-variable "existing_vpc" {
-  description = "When reusing an existing network, these are details of the network to use"
-  type = object({
-    vpc_id = string
-    # The security group id to use when not creating a new network 
-    security_group_id = optional(string, "")
-    # The subnet mask for private subnets, when creating the network i.e subnet-id => 10.90.0.0/24
-    private_subnet_ids = optional(list(string), [])
-    # The ids of the private subnets to use when not creating a new network 
-  })
-  default = null
+variable "assign_public_ip" {
+  description = "Indicates if the task should be assigned a public IP"
+  type        = bool
+  default     = false
+}
+
+variable "subnet_ids" {
+  description = "The subnet id's to use for the nuke service"
+  type        = list(string)
 }
 
 variable "log_group_name" {
   description = "The name of the log group to create"
   type        = string
-  default     = "nuke"
+  default     = null
 }
 
 variable "log_retention_in_days" {
@@ -85,6 +83,12 @@ variable "log_retention_in_days" {
 
 variable "log_group_kms_key_id" {
   description = "The KMS key id to use for encrypting the log group"
+  type        = string
+  default     = null
+}
+
+variable "configuration_secret_name" {
+  description = "The name of the AWS Secrets Manager secret to store the configuration"
   type        = string
   default     = null
 }
@@ -106,21 +110,6 @@ variable "task_role_additional_policies" {
   type = map(object({
     policy = string
   }))
-  default = null
-}
-
-variable "network" {
-  description = "The network to use for the endpoints and optinal resolvers"
-  type = object({
-    availability_zones = optional(number, 2)
-    # The id of the ipam pool to use when creating the network
-    name = optional(string, "nuke")
-    # The name of the network to create
-    private_netmask = optional(number, 28)
-    ## The transit gateway id to use for the network
-    vpc_cidr = optional(string, "")
-    # The vpc id to use when reusing an existing network 
-  })
   default = null
 }
 

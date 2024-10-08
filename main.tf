@@ -1,22 +1,4 @@
 
-## Provision the network is required 
-module "vpc" {
-  count   = local.enable_vpc_creation ? 1 : 0
-  source  = "appvia/network/aws"
-  version = "0.3.1"
-
-  availability_zones     = var.network.availability_zones
-  enable_ipam            = false
-  enable_transit_gateway = false
-  ipam_pool_id           = null
-  name                   = var.network.name
-  private_subnet_netmask = var.network.private_netmask
-  tags                   = var.tags
-  transit_gateway_id     = null
-  vpc_cidr               = var.network.vpc_cidr
-  vpc_netmask            = null
-}
-
 ## Provision a KMS for the log group to use, if required 
 module "kms" {
   count   = var.create_kms_key ? 1 : 0
@@ -35,11 +17,37 @@ module "kms" {
   tags                    = merge(var.tags, { "Name" = var.kms_key_alias })
 }
 
+## Craft a IAM policy document that permission the ecs task to retrieve 
+## the secret from secrets manager 
+data "aws_iam_policy_document" "secrets_manager" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_role.execution.arn]
+    }
+    resources = [
+      format("arn:aws:secretsmanager:%s:%s:secret:%s", local.region, local.account_id, local.secret_name),
+    ]
+  }
+}
+
 ## Place the configuration within the parameter store for the ecs task to access 
-resource "aws_ssm_parameter" "configuration" {
-  description = format("Contains the configuration yaml for the aws-nuke task for %s", local.name)
-  name        = format("/lza/parameters/%s", local.name)
-  tags        = var.tags
-  type        = "String"
-  value       = local.configuration
+# trivy:ignore:AVD-AWS-0017
+# tfsec:ignore:aws-ssm-secret-use-customer-key
+resource "aws_secretsmanager_secret" "configuration" {
+  description             = format("Contains the configuration yaml for the aws-nuke task for %s", local.name)
+  name                    = local.secret_name
+  policy                  = data.aws_iam_policy_document.secrets_manager.json
+  recovery_window_in_days = 0
+  tags                    = var.tags
+}
+
+## Provision a secret version for the configuration
+resource "aws_secretsmanager_secret_version" "configuration" {
+  secret_id     = aws_secretsmanager_secret.configuration.id
+  secret_string = local.configuration
 }
