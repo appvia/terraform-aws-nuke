@@ -1,4 +1,10 @@
 
+variable "name" {
+  description = "The name of the nuke service"
+  type        = string
+  default     = "nuke-service"
+}
+
 variable "create_kms_key" {
   description = "Indicates if a KMS key should be created for the log group"
   type        = bool

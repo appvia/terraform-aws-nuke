@@ -141,6 +141,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_log_group_kms_key_id"></a> [log\_group\_kms\_key\_id](#input\_log\_group\_kms\_key\_id) | The KMS key id to use for encrypting the log group | `string` | `null` | no |
 | <a name="input_log_group_name"></a> [log\_group\_name](#input\_log\_group\_name) | The name of the log group to create | `string` | `null` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The number of days to retain logs for | `number` | `7` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name of the nuke service | `string` | `"nuke-service"` | no |
 | <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression to use for the event rule | `string` | `"cron(0 0 * * ? *)"` | no |
 | <a name="input_task_role_additional_policies"></a> [task\_role\_additional\_policies](#input\_task\_role\_additional\_policies) | A map of inline policies to attach to the IAM role | <pre>map(object({<br/>    policy = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_task_role_permissions_arns"></a> [task\_role\_permissions\_arns](#input\_task\_role\_permissions\_arns) | A list of permissions to attach to the IAM role | `list(string)` | <pre>[<br/>  "arn:aws:iam::aws:policy/AdministratorAccess"<br/>]</pre> | no |

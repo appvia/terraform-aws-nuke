@@ -5,7 +5,7 @@ locals {
   ## The region the resources are being provisioned in
   region = data.aws_region.current.name
   ## Is the unique identifier for resources created by this module 
-  name = format("nuke-%s", local.region)
+  name = var.name
   ## Is the key administrator role or principal for any KMS key provisioned
   kms_key_administrator_arn = var.kms_administrator_role_name != null ? "arn:aws:iam::${local.account_id}:role/${var.kms_administrator_role_name}" : "arn:aws:iam::${local.account_id}:root"
   ## Name of the cloudwatch log group to create 
