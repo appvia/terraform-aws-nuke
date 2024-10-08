@@ -1,0 +1,2263 @@
+---
+blocklist:
+  - 1234567890
+
+regions:
+  - global
+  - eu-west-2
+
+resource-types:
+  includes:
+    - AWSBackupRecoveryPoint
+    - AWSBackupSelection
+    - BackupVault
+    - AppStreamDirectoryConfig
+    - AppStreamFleet
+    - AppStreamFleetState
+    - AppStreamImage
+    - AppStreamImageBuilder
+    - AppStreamImageBuilderWaiter
+    - AppStreamStack
+    - AppStreamStackFleetAttachment
+    - AutoScalingGroup
+    - AutoScalingPlansScalingPlan
+    - BatchComputeEnvironment
+    - BatchComputeEnvironmentState
+    - BatchJobQueue
+    - BatchJobQueueState
+    - Cloud9Environment
+    - CloudDirectoryDirectory
+    - CloudDirectorySchema
+    - CloudFrontDistribution
+    - CloudFrontDistributionDeployment
+    - CloudHSMV2Cluster
+    - CloudHSMV2ClusterHSM
+    - CloudSearchDomain
+    - CloudWatchAlarm
+    - CloudWatchDashboard
+    - CloudWatchLogsDestination
+    - CloudWatchLogsLogGroup
+    - CodeBuildProject
+    - CodeCommitRepository
+    - CodeDeployApplication
+    - CodePipelinePipeline
+    - CodeStarProject
+    - CognitoIdentityPool
+    - CognitoUserPool
+    - CognitoUserPoolDomain
+    - DAXCluster
+    - DAXParameterGroup
+    - DAXSubnetGroup
+    - DataPipelinePipeline
+    - DatabaseMigrationServiceCertificate
+    - DatabaseMigrationServiceEndpoint
+    - DatabaseMigrationServiceEventSubscription
+    - DatabaseMigrationServiceReplicationInstance
+    - DatabaseMigrationServiceReplicationTask
+    - DatabaseMigrationServiceSubnetGroup
+    - DeviceFarmProject
+    - DirectoryServiceDirectory
+    - DynamoDBTable
+    - EC2Address
+    - EC2ClientVpnEndpoint
+    - EC2ClientVpnEndpointAttachment
+    - EC2CustomerGateway
+    - EC2Image
+    - EC2Instance
+    - EC2InternetGateway
+    - EC2InternetGatewayAttachment
+    - EC2KeyPair
+    - EC2LaunchTemplate
+    - EC2NATGateway
+    - EC2NetworkACL
+    - EC2PlacementGroup
+    - EC2RouteTable
+    - EC2SecurityGroup
+    - EC2Snapshot
+    - EC2SpotFleetRequest
+    - EC2Subnet
+    - EC2TGW
+    - EC2TGWAttachment
+    - EC2VPC
+    - EC2VPCEndpoint
+    - EC2VPCEndpointServiceConfiguration
+    - EC2VPCPeeringConnection
+    - EC2VPNConnection
+    - EC2VPNGatewayAttachment
+    - EC2Volume
+    - ECRRepository
+    - ECSCluster
+    - ECSClusterInstance
+    - ECSService
+    - ECSTaskDefinition
+    - EFSFileSystem
+    - EFSMountTarget
+    - EKSCluster
+    - ELB
+    - ELBv2
+    - ELBv2TargetGroup
+    - EMRCluster
+    - EMRSecurityConfiguration
+    - ESDomain
+    - ElasticBeanstalkApplication
+    - ElasticBeanstalkEnvironment
+    - ElasticTranscoderPipeline
+    - ElasticacheCacheCluster
+    - ElasticacheReplicationGroup
+    - ElasticacheSubnetGroup
+    - FSxBackup
+    - FSxFileSystem
+    - FirehoseDeliveryStream
+    - GlueClassifier
+    - GlueConnection
+    - GlueCrawler
+    - GlueDatabase
+    - GlueDevEndpoint
+    - GlueJob
+    - GlueTrigger
+    - IAMGroup
+    - IAMGroupPolicy
+    - IAMGroupPolicyAttachment
+    - IAMInstanceProfile
+    - IAMInstanceProfileRole
+    - IAMLoginProfile
+    - IAMOpenIDConnectProvider
+    - IAMRole
+    - IAMServerCertificate
+    - IAMServiceSpecificCredential
+    - IAMUser
+    - IAMUserAccessKey
+    - IAMUserGroupAttachment
+    - IAMUserPolicy
+    - IAMUserPolicyAttachment
+    - IAMVirtualMFADevice
+    - IoTAuthorizer
+    - IoTCACertificate
+    - IoTCertificate
+    - IoTJob
+    - IoTOTAUpdate
+    - IoTPolicy
+    - IoTRoleAlias
+    - IoTStream
+    - IoTThing
+    - IoTThingGroup
+    - IoTThingType
+    - IoTThingTypeState
+    - IoTTopicRule
+    - KMSAlias
+    - KMSKey
+    - KinesisAnalyticsApplication
+    - KinesisStream
+    - KinesisVideoProject
+    - LambdaEventSourceMapping
+    - LambdaFunction
+    - LaunchConfiguration
+    - LifecycleHook
+    - LightsailDisk
+    - LightsailDomain
+    - LightsailInstance
+    - LightsailKeyPair
+    - LightsailLoadBalancer
+    - LightsailStaticIP
+    - MQBroker
+    - MSKCluster
+    - MediaConvertJobTemplate
+    - MediaConvertPreset
+    - MediaConvertQueue
+    - MediaLiveChannel
+    - MediaLiveInput
+    - MediaLiveInputSecurityGroup
+    - MediaPackageChannel
+    - MediaPackageOriginEndpoint
+    - MediaStoreContainer
+    - MediaStoreDataItems
+    - MediaTailorConfiguration
+    - MobileProject
+    - NeptuneCluster
+    - NeptuneInstance
+    - NetpuneSnapshot
+    - OpsWorksApp
+    - OpsWorksCMBackup
+    - OpsWorksCMServer
+    - OpsWorksCMServerState
+    - OpsWorksInstance
+    - OpsWorksLayer
+    - OpsWorksUserProfile
+    - RDSDBCluster
+    - RDSDBClusterParameterGroup
+    - RDSDBParameterGroup
+    - RDSDBSubnetGroup
+    - RDSInstance
+    - RDSSnapshot
+    - RedshiftCluster
+    - RedshiftParameterGroup
+    - RedshiftSnapshot
+    - RedshiftSubnetGroup
+    - RekognitionCollection
+    - ResourceGroupGroup
+    - RoboMakerDeploymentJob
+    - RoboMakerFleet
+    - RoboMakerRobot
+    - RoboMakerRobotApplication
+    - RoboMakerSimulationApplication
+    - RoboMakerSimulationJob
+    - Route53HostedZone
+    - Route53ResourceRecordSet
+    - S3Bucket
+    - S3MultipartUpload
+    - S3Object
+    - SESConfigurationSet
+    - SESIdentity
+    - SESReceiptFilter
+    - SESReceiptRuleSet
+    - SESTemplate
+    - SFNStateMachine
+    - SNSEndpoint
+    - SNSPlatformApplication
+    - SNSSubscription
+    - SNSTopic
+    - SQSQueue
+    - SSMActivation
+    - SSMAssociation
+    - SSMDocument
+    - SSMMaintenanceWindow
+    - SSMParameter
+    - SSMPatchBaseline
+    - SSMResourceDataSync
+    - SageMakerEndpoint
+    - SageMakerEndpointConfig
+    - SageMakerModel
+    - SageMakerNotebookInstance
+    - SageMakerNotebookInstanceState
+    - SecretsManagerSecret
+    - ServiceCatalogConstraintPortfolioAttachment
+    - ServiceCatalogPortfolio
+    - ServiceCatalogPortfolioProductAttachment
+    - ServiceCatalogPortfolioShareAttachment
+    - ServiceCatalogPrincipalPortfolioAttachment
+    - ServiceCatalogProduct
+    - ServiceCatalogProvisionedProduct
+    - ServiceCatalogTagOption
+    - ServiceCatalogTagOptionPortfolioAttachment
+    - ServiceDiscoveryInstance
+    - ServiceDiscoveryNamespace
+    - ServiceDiscoveryService
+    - SimpleDBDomain
+    - StorageGatewayFileShare
+    - StorageGatewayGateway
+    - StorageGatewayTape
+    - StorageGatewayVolume
+    - WAFRegionalByteMatchSet
+    - WAFRegionalByteMatchSetIP
+    - WAFRegionalIPSet
+    - WAFRegionalIPSetIP
+    - WAFRegionalRateBasedRule
+    - WAFRegionalRateBasedRulePredicate
+    - WAFRegionalRegexMatchSet
+    - WAFRegionalRegexMatchTuple
+    - WAFRegionalRegexPatternSet
+    - WAFRegionalRegexPatternString
+    - WAFRegionalRule
+    - WAFRegionalRulePredicate
+    - WAFRegionalWebACL
+    - WAFRegionalWebACLRuleAttachment
+    - WAFRule
+    - WAFWebACL
+    - WAFWebACLRuleAttachment
+    - WorkLinkFleet
+    - WorkSpacesWorkspace
+
+  excludes:
+    - Cloud9Environment
+    - CloudSearchDomain
+    - CodeStarConnection
+    - CodeStarNotification
+    - CodeStarProject
+    - EC2DHCPOption
+    - EC2NetworkACL
+    - EC2NetworkInterface
+    - FMSNotificationChannel
+    - FMSPolicy
+    - MachineLearningBranchPrediction
+    - MachineLearningDataSource
+    - MachineLearningEvaluation
+    - MachineLearningMLModel
+    - OpsWorksApp
+    - OpsWorksApp
+    - OpsWorksCMBackup
+    - OpsWorksCMServer
+    - OpsWorksCMServerState
+    - OpsWorksInstance
+    - OpsWorksLayer
+    - OpsWorksUserProfile
+    - RedshiftServerlessNamespace
+    - RedshiftServerlessSnapshot
+    - RedshiftServerlessWorkgroup
+    - RoboMakerDeploymentJob
+    - RoboMakerFleet
+    - RoboMakerRobot
+    - RoboMakerRobotApplication
+    - RoboMakerSimulationApplication
+    - RoboMakerSimulationJob
+    - S3Object
+    - ServiceCatalogTagOption
+    - ServiceCatalogTagOptionPortfolioAttachment
+
+presets:
+  landing-zone:
+    filters:
+      CloudWatchLogsLogGroup:
+        - property: logGroupName
+          type: contains
+          value: "AWSAccelerator"
+        - property: Name
+          type: contains
+          value: "lza-"
+      IAMInstanceProfile:
+        - property: Name
+          type: regex
+          value: "^lza-.*"
+      IAMInstanceProfileRole:
+        - property: InstanceProfile
+          type: regex
+          value: "^AWSAccelerator.*"
+        - property: InstanceProfile
+          type: regex
+          value: "^lza-.*"
+      IAMRole:
+        - property: Name
+          type: regex
+          value: "^AWSAccelerator.*"
+        - property: Name
+          type: regex
+          value: "^lza-.*"
+        - property: Name
+          type: contains
+          value: "CrossAccount"
+      KMSAlias:
+        - property: Name
+          type: regex
+          value: "^alias/accelerator/.*"
+        - property: Name
+          type: regex
+          value: "^alias/lza/.*"
+      KMSKey:
+        - property: tag:Accelerator
+          type: exact
+          value: AWSAccelerator
+        - property: Name
+          type: regex
+          value: "^lza-.*"
+      SSMParameter:
+        - property: Name
+          type: regex
+          value: "^/accelerator/AWSAccelerator.*"
+        - property: Name
+          type: regex
+          value: "^/lza/.*"
+      SNSSubscription:
+        - property: ARN
+          type: regex
+          value: "^arn:aws:sns:.*:.*:aws-accelerator.*"
+        - property: ARN
+          type: regex
+          value: "^arn:aws:sns:.*:.*:lza-.*"
+      SNSTopic:
+        - property: Name
+          type: contains
+          value: "lza-"
+
+  control-tower:
+    filters:
+      CloudWatchLogsLogGroup:
+        - property: logGroupName
+          type: contains
+          value: "aws-controltower"
+      IAMRole:
+        - property: Name
+          type: regex
+          value: "^AWSControlTower.*"
+        - property: Name
+          type: regex
+          value: "^aws-controltower.*"
+      LambdaFunction:
+        - property: Name
+          type: regex
+          value: "^aws-controltower-NotificationForwarder$"
+      SNSSubscription:
+        - property: TopicARN
+          type: regex
+          value: "^arn:aws:sns:.*:.*:aws-controltower.*"
+      SNSTopic:
+        - property: TopicARN
+          type: contains
+          value: "aws-controltower"
+
+  cloud-intelligence:
+    filters:
+      IAMRole:
+        - property: Name
+          type: regex
+          value: "^CID-DC.*"
+
+accounts:
+  503440911135:
+    presets:
+      - cloud-intelligence
+      - control-tower
+      - landing-zone
+    filters:
+      AWSBackupRecoveryPoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AWSBackupSelection:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      BackupVault:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamDirectoryConfig:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamFleet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamFleetState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamImage:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamImageBuilder:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamImageBuilderWaiter:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamStack:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AppStreamStackFleetAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AutoScalingGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      AutoScalingPlansScalingPlan:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      BatchComputeEnvironment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      BatchComputeEnvironmentState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      BatchJobQueue:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      BatchJobQueueState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      Cloud9Environment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudDirectoryDirectory:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudDirectorySchema:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudFrontDistribution:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudFrontDistributionDeployment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudHSMV2Cluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudHSMV2ClusterHSM:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudSearchDomain:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudTrailTrail:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudWatchAlarm:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudWatchDashboard:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudWatchEventsRule:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudWatchLogsDestination:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CloudWatchLogsLogGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+        - property: Name
+          type: contains
+          value: "AWSAccelerator"
+      CodeBuildProject:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CodeCommitRepository:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CodeDeployApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CodePipelinePipeline:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CodeStarProject:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CognitoIdentityPool:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CognitoUserPool:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      CognitoUserPoolDomain:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DAXCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DAXParameterGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DAXSubnetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DataPipelinePipeline:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceCertificate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceEventSubscription:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceReplicationInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceReplicationTask:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DatabaseMigrationServiceSubnetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DeviceFarmProject:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DirectoryServiceDirectory:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DynamoDBTable:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      DynamoDBTableItem:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Address:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2ClientVpnEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2ClientVpnEndpointAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2CustomerGateway:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Image:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Instance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2InternetGateway:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2InternetGatewayAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2KeyPair:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2LaunchTemplate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2NATGateway:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2NetworkACL:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2PlacementGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2RouteTable:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2SecurityGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Snapshot:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2SpotFleetRequest:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Subnet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2TGW:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2TGWAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPC:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPCEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPCEndpointServiceConfiguration:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPCPeeringConnection:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPNConnection:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPNGateway:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2VPNGatewayAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EC2Volume:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ECRRepository:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ECSCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ECSClusterInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ECSService:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ECSTaskDefinition:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EFSFileSystem:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EFSMountTarget:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EKSCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ELB:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ELBv2:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ELBv2TargetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EMRCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      EMRSecurityConfiguration:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ESDomain:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticBeanstalkApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticBeanstalkEnvironment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticTranscoderPipeline:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticacheCacheCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticacheReplicationGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ElasticacheSubnetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      FSxBackup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      FSxFileSystem:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      FirehoseDeliveryStream:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueClassifier:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueConnection:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueCrawler:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueDatabase:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueDevEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueJob:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      GlueTrigger:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMGroupPolicy:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMGroupPolicyAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMInstanceProfile:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMInstanceProfileRole:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMLoginProfile:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMOpenIDConnectProvider:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMPolicy:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMRole:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMSAMLProvider:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMServerCertificate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMServiceSpecificCredential:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMUser:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMUserAccessKey:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMUserGroupAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMUserPolicy:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMUserPolicyAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IAMVirtualMFADevice:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTAuthorizer:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTCACertificate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTCertificate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTJob:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTOTAUpdate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTPolicy:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTRoleAlias:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTStream:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTThing:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTThingGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTThingType:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTThingTypeState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      IoTTopicRule:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      KMSAlias:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      KMSKey:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      KinesisAnalyticsApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      KinesisStream:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      KinesisVideoProject:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LambdaEventSourceMapping:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LambdaFunction:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+        - property: Name
+          type: regex
+          value: "^AWSAccelerator.*"
+      LaunchConfiguration:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LifecycleHook:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailDisk:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailDomain:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailKeyPair:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailLoadBalancer:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      LightsailStaticIP:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MQBroker:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MSKCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaConvertJobTemplate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaConvertPreset:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaConvertQueue:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaLiveChannel:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaLiveInput:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaLiveInputSecurityGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaPackageChannel:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaPackageOriginEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaStoreContainer:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaStoreDataItems:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MediaTailorConfiguration:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      MobileProject:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      NeptuneCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      NeptuneInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      NetpuneSnapshot:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksApp:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksCMBackup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksCMServer:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksCMServerState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksLayer:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      OpsWorksUserProfile:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSDBCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSDBClusterParameterGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSDBParameterGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSDBSubnetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RDSSnapshot:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RedshiftCluster:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RedshiftParameterGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RedshiftSnapshot:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RedshiftSubnetGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RekognitionCollection:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ResourceGroupGroup:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerDeploymentJob:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerFleet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerRobot:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerRobotApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerSimulationApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      RoboMakerSimulationJob:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      Route53HostedZone:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      Route53ResourceRecordSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      S3Bucket:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      S3MultipartUpload:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      S3Object:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SESConfigurationSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SESIdentity:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SESReceiptFilter:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SESReceiptRuleSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SESTemplate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SFNStateMachine:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SNSEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SNSPlatformApplication:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SNSSubscription:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SNSTopic:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SQSQueue:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMActivation:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMAssociation:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMDocument:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMMaintenanceWindow:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMParameter:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMPatchBaseline:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SSMResourceDataSync:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SageMakerEndpoint:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SageMakerEndpointConfig:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SageMakerModel:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SageMakerNotebookInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SageMakerNotebookInstanceState:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SecretsManagerSecret:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogConstraintPortfolioAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogPortfolio:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogPortfolioProductAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogPortfolioShareAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogPrincipalPortfolioAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogProduct:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogProvisionedProduct:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogTagOption:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceCatalogTagOptionPortfolioAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceDiscoveryInstance:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceDiscoveryNamespace:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      ServiceDiscoveryService:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      SimpleDBDomain:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      StorageGatewayFileShare:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      StorageGatewayGateway:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      StorageGatewayTape:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      StorageGatewayVolume:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalByteMatchSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalByteMatchSetIP:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalIPSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalIPSetIP:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRateBasedRule:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRateBasedRulePredicate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRegexMatchSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRegexMatchTuple:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRegexPatternSet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRegexPatternString:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRule:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalRulePredicate:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalWebACL:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRegionalWebACLRuleAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFRule:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFWebACL:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WAFWebACLRuleAttachment:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WorkLinkFleet:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
+      WorkSpacesWorkspace:
+        - property: tag:Owner
+          value: Support
+        - property: tag:Owner
+          value: Solutions
+        - property: tag:aws-nuke
+          value: ignore
