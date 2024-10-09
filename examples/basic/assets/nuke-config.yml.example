@@ -6,6 +6,9 @@ regions:
   - global
   - ${region}
 
+bypass-alias-check-accounts:
+  - ${account_id}
+
 resource-types:
   includes:
     - AWSBackupRecoveryPoint
