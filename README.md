@@ -113,7 +113,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | [aws_iam_role_policy_attachment.task_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_secretsmanager_secret.configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_version.configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
-| [aws_iam_policy_document.execution_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
@@ -139,7 +138,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_log_group_name"></a> [log\_group\_name](#input\_log\_group\_name) | The name of the log group to create | `string` | `null` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The number of days to retain logs for | `number` | `7` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the nuke service | `string` | `"nuke-service"` | no |
-| <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression to use for the event rule | `string` | `"cron(0 0 * * ? *)"` | no |
+| <a name="input_schedule_expression"></a> [schedule\_expression](#input\_schedule\_expression) | The schedule expression to use for the event rule (in UTC) | `string` | `"cron(0 0 * * ? *)"` | no |
 | <a name="input_task_role_additional_policies"></a> [task\_role\_additional\_policies](#input\_task\_role\_additional\_policies) | A map of inline policies to attach to the IAM role | <pre>map(object({<br/>    policy = string<br/>  }))</pre> | `{}` | no |
 | <a name="input_task_role_permissions_arns"></a> [task\_role\_permissions\_arns](#input\_task\_role\_permissions\_arns) | A list of permissions to attach to the IAM role | `list(string)` | <pre>[<br/>  "arn:aws:iam::aws:policy/AdministratorAccess"<br/>]</pre> | no |
 | <a name="input_task_role_permissions_boundary_arn"></a> [task\_role\_permissions\_boundary\_arn](#input\_task\_role\_permissions\_boundary\_arn) | The boundary policy to attach to the IAM role | `string` | `null` | no |

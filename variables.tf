@@ -130,7 +130,7 @@ variable "task_role_additional_policies" {
 }
 
 variable "schedule_expression" {
-  description = "The schedule expression to use for the event rule"
+  description = "The schedule expression to use for the event rule (in UTC)"
   type        = string
   default     = "cron(0 0 * * ? *)"
 }
