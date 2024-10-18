@@ -21,8 +21,10 @@ module "kms" {
 # trivy:ignore:AVD-AWS-0017
 # tfsec:ignore:aws-ssm-secret-use-customer-key
 resource "aws_secretsmanager_secret" "configuration" {
-  description             = format("Contains the configuration yaml for the aws-nuke task for %s", local.name)
-  name                    = local.secret_name
+  for_each = var.tasks
+
+  description             = format("Contains the configuration yaml for the aws-nuke '%s' task", each.key)
+  name                    = format("/%s/%s", var.configuration_secret_name_prefix, each.key)
   recovery_window_in_days = 0
   tags                    = var.tags
 
@@ -43,6 +45,8 @@ resource "aws_secretsmanager_secret" "configuration" {
 
 ## Provision a secret version for the configuration
 resource "aws_secretsmanager_secret_version" "configuration" {
-  secret_id     = aws_secretsmanager_secret.configuration.id
-  secret_string = local.configuration
+  for_each = var.tasks
+
+  secret_id     = aws_secretsmanager_secret.configuration[each.key].id
+  secret_string = templatefile(each.value.configuration_file, local.configuration_data)
 }

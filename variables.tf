@@ -21,10 +21,32 @@ variable "create_kms_key" {
   default     = false
 }
 
-variable "enable_deletion" {
-  description = "Indicates the scheduled task will dry-run, log and report but not delete resources"
-  type        = bool
-  default     = false
+variable "tasks" {
+  description = "A collection of nuke tasks to run and when to run them"
+  type = map(object({
+    additional_permissions = optional(map(object({
+      policy = string
+    })), {})
+    configuration_file      = string
+    description             = string
+    dry_run                 = optional(bool, true)
+    permission_boundary_arn = optional(string, null)
+    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    retention_in_days       = optional(number, 7)
+    schedule                = string
+  }))
+
+  ## The task key must be all lowercase and contain only alpha characters
+  validation {
+    condition     = alltrue([for task in keys(var.tasks) : can(regex("^[a-z\\_]+$", task))])
+    error_message = "The task key must be all lowercase and contain only alphanumeric characters"
+  }
+
+  ## The task name cannot be longer than 32 
+  validation {
+    condition     = alltrue([for task in keys(var.tasks) : length(task) <= 32])
+    error_message = "The task name cannot be longer than 32 characters"
+  }
 }
 
 variable "kms_key_alias" {
@@ -37,11 +59,6 @@ variable "kms_administrator_role_name" {
   description = "The name of the role to use as the administrator for the KMS key (defaults to account root)"
   type        = string
   default     = null
-}
-
-variable "nuke_configuration" {
-  description = "The YAML configuration to use for aws-nuke"
-  type        = string
 }
 
 variable "container_image" {
@@ -85,16 +102,10 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "log_group_name" {
+variable "log_group_name_prefix" {
   description = "The name of the log group to create"
   type        = string
-  default     = null
-}
-
-variable "log_retention_in_days" {
-  description = "The number of days to retain logs for"
-  type        = number
-  default     = 7
+  default     = "/lza/services/nuke"
 }
 
 variable "log_group_kms_key_id" {
@@ -103,36 +114,22 @@ variable "log_group_kms_key_id" {
   default     = null
 }
 
-variable "configuration_secret_name" {
-  description = "The name of the AWS Secrets Manager secret to store the configuration"
+variable "configuration_secret_name_prefix" {
+  description = "The prefix to use for AWS Secrets Manager secrets to store the nuke configuration"
   type        = string
-  default     = null
+  default     = "/lza/configuration/nuke"
 }
 
-variable "task_role_permissions_arns" {
-  description = "A list of permissions to attach to the IAM role"
-  type        = list(string)
-  default     = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-}
-
-variable "task_role_permissions_boundary_arn" {
-  description = "The boundary policy to attach to the IAM role"
+variable "iam_execution_role_prefix" {
+  description = "The prefix to use for the IAM execution roles used by the tasks"
   type        = string
-  default     = null
+  default     = "nuke-execution-"
 }
 
-variable "task_role_additional_policies" {
-  description = "A map of inline policies to attach to the IAM role"
-  type = map(object({
-    policy = string
-  }))
-  default = {}
-}
-
-variable "schedule_expression" {
-  description = "The schedule expression to use for the event rule (in UTC)"
+variable "iam_task_role_prefix" {
+  description = "The prefix to use for the IAM tasg roles used by the tasks"
   type        = string
-  default     = "cron(0 0 * * ? *)"
+  default     = "nuke-"
 }
 
 variable "tags" {

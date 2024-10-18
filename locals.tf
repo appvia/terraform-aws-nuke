@@ -6,18 +6,49 @@ locals {
   region = var.region
   ## Is the unique identifier for resources created by this module 
   name = var.name
+
   ## Is the key administrator role or principal for any KMS key provisioned
   kms_key_administrator_arn = var.kms_administrator_role_name != null ? "arn:aws:iam::${local.account_id}:role/${var.kms_administrator_role_name}" : "arn:aws:iam::${local.account_id}:root"
-  ## Name of the cloudwatch log group to create 
-  log_group_name = var.log_group_name == null ? format("/lza/services/%s", local.name) : var.log_group_name
+
   ## The configuration values passed to the rendered template 
   configuration_data = {
     account_id = local.account_id
     region     = local.region
   }
-  ## Is the name of the secret to store the configuration in 
-  secret_name = var.configuration_secret_name == null ? format("/lza/configuration/%s", local.name) : var.configuration_secret_name
-  ## Is the templated configuration for aws-nuke 
-  configuration = templatefile(var.nuke_configuration, local.configuration_data)
+
+  ## We need to create a map of task->permission_arn for every task 
+  task_permissions_flattened = flatten([
+    for task, config in var.tasks : [
+      for permission_arn in config.permission_arns : {
+        permission_arn = permission_arn
+        task           = task
+      }
+    ]
+  ])
+  ## We need to create a map of task->additional_permissions for every task 
+  task_permissions_arns = {
+    for task, config in local.task_permissions_flattened : format("%s-%s", config.task, config.permission_arn) => {
+      task           = config.task
+      permission_arn = config.permission_arn
+    }
+  }
+
+  ## We need to create a map of task->additional_permissions for every task 
+  task_additional_permissions_flattened = flatten([
+    for task, config in var.tasks : [
+      for permission_arn, permission in config.additional_permissions : {
+        task   = task
+        policy = permission.policy
+      }
+    ]
+  ])
+
+  ## We need to create a map of task->additional_permissions for every task
+  task_additional_permissions = {
+    for task, config in local.task_additional_permissions_flattened : format("%s-%s", config.task, task) => {
+      task   = config.task
+      policy = config.policy
+    }
+  }
 }
 

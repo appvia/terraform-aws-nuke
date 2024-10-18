@@ -28,6 +28,21 @@ module "vpc" {
   tags                   = local.tags
   transit_gateway_id     = null
   vpc_cidr               = "172.16.0.0/25"
+
+}
+
+data "aws_iam_policy_document" "additional" {
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+    resources = ["*"]
+    effect    = "Allow"
+  }
 }
 
 module "nuke" {
@@ -37,19 +52,36 @@ module "nuke" {
   account_id = data.aws_caller_identity.current.account_id
   ## Indicates if the KMS key should be created for the log group 
   create_kms_key = false
-  ## Indicates if we should skips deletion (default is false)
-  enable_deletion = false
-  ## This is the location of the aws-nuke configuration file, this is 
-  ## copied into the container via a parameter store value
-  nuke_configuration = "${path.module}/assets/nuke-config.yml.example"
   ## The region to use for the resources 
   region = data.aws_region.current.name
-  ## This will create a task that runs every day at midnight
-  schedule_expression = "cron(0 0 * * ? *)"
-  ## Name of the secret (AWS Secrets Manager) to store the configuration in 
-  configuration_secret_name = "sandbox/nuke"
   ## The ssubnet_ids to use for the nuke service 
   subnet_ids = module.vpc.public_subnet_ids
   ## The tags for the resources created by this module 
   tags = local.tags
+
+  tasks = {
+    "nuke" = {
+      ## The path to the configuration file for the task
+      configuration_file = "${path.module}/assets/nuke-config.yml.example"
+      ## A description for the task 
+      description = "Nuke the account example"
+      ## Indicates if the task should be a dry run (default is true)
+      dry_run = false
+      ## The log retention in days for the task 
+      retention_in_days = 7
+      ## The schedule expression for the task 
+      schedule = "cron(0 0 * * ? *)"
+      ## The IAM permissions to attach to the task role 
+      permission_arns = [
+        "arn:aws:iam::aws:policy/AdministratorAccess"
+      ]
+      ## Additional inline permissions 
+      additional_permissions = {
+        "secrets" = {
+          policy = data.aws_iam_policy_document.additional.json
+        }
+      }
+    }
+  }
+
 }
