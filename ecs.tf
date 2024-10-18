@@ -2,7 +2,7 @@
 ## Provision the ECS Cluster used to run the task 
 # tfsec:ignore:aws-ecs-enable-container-insight
 resource "aws_ecs_cluster" "current" {
-  name = local.name
+  name = var.ecs_cluster_name
   tags = var.tags
 
   setting {
@@ -17,7 +17,7 @@ resource "aws_iam_role" "execution" {
   for_each = var.tasks
 
   description = format("Used by the ECS task to execute within the ECS cluster by the nuke service: '%s'", each.key)
-  name        = format("%s-%s", var.iam_execution_role_prefix, each.key)
+  name        = format("%s%s", var.iam_execution_role_prefix, each.key)
   tags        = var.tags
 
   assume_role_policy = jsonencode({
@@ -39,7 +39,7 @@ resource "aws_iam_role" "task" {
   for_each = var.tasks
 
   description          = format("Permissions for the ECS nuke task: '%s' to run under", each.key)
-  name                 = format("%s-%s", var.iam_task_role_prefix, each.key)
+  name                 = format("%s%s", var.iam_task_role_prefix, each.key)
   permissions_boundary = each.value.permission_boundary_arn
   tags                 = var.tags
 
@@ -59,7 +59,7 @@ resource "aws_iam_role" "task" {
 
 ## Attach any managed polices to the task role - i.e the permissions which the task can 
 ## perform within the AWS account/s
-resource "aws_iam_role_policy_attachment" "task_permissions" {
+resource "aws_iam_role_policy_attachment" "task_permissions_arns" {
   for_each = local.task_permissions_arns
 
   role       = aws_iam_role.task[each.value.task].name
@@ -68,11 +68,11 @@ resource "aws_iam_role_policy_attachment" "task_permissions" {
 
 ## Allow any additional permissions to be attached to the task role - these are inline 
 ## policies applied to the task
-resource "aws_iam_role_policy" "task_permissions" {
+resource "aws_iam_role_policy" "task_additional_permissions" {
   for_each = local.task_additional_permissions
 
-  role   = aws_iam_role.task[each.key].name
-  name   = each.value.task
+  role   = aws_iam_role.task[each.value.task].name
+  name   = each.value.permission_name
   policy = each.value.policy
 }
 
@@ -114,16 +114,16 @@ resource "aws_ecs_task_definition" "tasks" {
 
   cpu                      = var.container_cpu
   execution_role_arn       = aws_iam_role.execution[each.key].arn
-  family                   = local.name
+  family                   = format("nuke-%s", each.key)
   memory                   = var.container_memory
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  tags                     = var.tags
+  tags                     = merge(var.tags, { "Name" = each.key })
   task_role_arn            = aws_iam_role.task[each.key].arn
 
   container_definitions = jsonencode([
     {
-      name                   = each.key
+      name                   = format("nuke-%s", each.key)
       cpu                    = var.container_cpu
       entryPoint             = ["/bin/sh", "-c"]
       environment            = []

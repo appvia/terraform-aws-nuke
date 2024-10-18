@@ -4,7 +4,7 @@
 
 ## Provision the ECS events IAM role, which is used to trigger the ECS task
 resource "aws_iam_role" "cloudwatch" {
-  name = format("events-%s", local.name)
+  name = var.cloudwatch_event_role_name
   tags = var.tags
 
   assume_role_policy = jsonencode({
@@ -56,7 +56,7 @@ resource "aws_cloudwatch_event_target" "tasks" {
   arn       = aws_ecs_cluster.current.arn
   role_arn  = aws_iam_role.cloudwatch.arn
   rule      = aws_cloudwatch_event_rule.tasks[each.key].name
-  target_id = each.key
+  target_id = format("nuke-%s", each.key)
 
   ecs_target {
     launch_type         = "FARGATE"

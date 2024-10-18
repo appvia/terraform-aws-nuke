@@ -33,13 +33,7 @@ module "vpc" {
 
 data "aws_iam_policy_document" "additional" {
   statement {
-    actions = [
-      "secretsmanager:GetSecretValue"
-    ]
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
+    actions   = ["secretsmanager:GetSecretValue"]
     resources = ["*"]
     effect    = "Allow"
   }
@@ -58,19 +52,21 @@ module "nuke" {
   subnet_ids = module.vpc.public_subnet_ids
   ## The tags for the resources created by this module 
   tags = local.tags
+  ## name is the service name 
+  ecs_cluster_name = "nuke-example"
 
   tasks = {
-    "nuke" = {
+    "default" = {
       ## The path to the configuration file for the task
       configuration_file = "${path.module}/assets/nuke-config.yml.example"
       ## A description for the task 
-      description = "Nuke the account example"
+      description = "Runs the actual nuke service, deleting resources"
       ## Indicates if the task should be a dry run (default is true)
       dry_run = false
       ## The log retention in days for the task 
       retention_in_days = 7
-      ## The schedule expression for the task 
-      schedule = "cron(0 0 * * ? *)"
+      ## The schedule expression for the task, every friday at 10:00
+      schedule = "cron(0 10 ? * FRI *)"
       ## The IAM permissions to attach to the task role 
       permission_arns = [
         "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -82,6 +78,28 @@ module "nuke" {
         }
       }
     }
-  }
 
+    "dry-run" = {
+      ## The path to the configuration file for the task
+      configuration_file = "${path.module}/assets/nuke-config.yml.example"
+      ## A description for the task 
+      description = "Runs a dry run to validate what would be deleted"
+      ## Indicates if the task should be a dry run (default is true)
+      dry_run = true
+      ## The log retention in days for the task 
+      retention_in_days = 7
+      ## The schedule expression for the task - every monday at 09:00
+      schedule = "cron(0 9 ? * MON *)"
+      ## The IAM permissions to attach to the task role 
+      permission_arns = [
+        "arn:aws:iam::aws:policy/ReadOnlyAccess"
+      ]
+      ## Additional inline permissions 
+      additional_permissions = {
+        "secrets" = {
+          policy = data.aws_iam_policy_document.additional.json
+        }
+      }
+    }
+  }
 }

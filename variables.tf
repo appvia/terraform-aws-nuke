@@ -1,10 +1,4 @@
 
-variable "name" {
-  description = "The name of the nuke service"
-  type        = string
-  default     = "nuke-service"
-}
-
 variable "account_id" {
   description = "The account id to use for the resources"
   type        = string
@@ -19,6 +13,18 @@ variable "create_kms_key" {
   description = "Indicates if a KMS key should be created for the log group"
   type        = bool
   default     = false
+}
+
+variable "ecs_cluster_name" {
+  description = "The name of the ECS cluster we provision run the nuke tasks within"
+  type        = string
+  default     = "nuke"
+}
+
+variable "cloudwatch_event_role_name" {
+  description = "The name of the role to use for the cloudwatch event rule"
+  type        = string
+  default     = "nuke-cloudwatch"
 }
 
 variable "tasks" {
@@ -38,7 +44,7 @@ variable "tasks" {
 
   ## The task key must be all lowercase and contain only alpha characters
   validation {
-    condition     = alltrue([for task in keys(var.tasks) : can(regex("^[a-z\\_]+$", task))])
+    condition     = alltrue([for task in keys(var.tasks) : can(regex("^[a-z\\_\\-]+$", task))])
     error_message = "The task key must be all lowercase and contain only alphanumeric characters"
   }
 
@@ -123,13 +129,13 @@ variable "configuration_secret_name_prefix" {
 variable "iam_execution_role_prefix" {
   description = "The prefix to use for the IAM execution roles used by the tasks"
   type        = string
-  default     = "nuke-execution-"
+  default     = "lza-nuke-execution-"
 }
 
 variable "iam_task_role_prefix" {
   description = "The prefix to use for the IAM tasg roles used by the tasks"
   type        = string
-  default     = "nuke-"
+  default     = "lza-nuke-"
 }
 
 variable "tags" {
