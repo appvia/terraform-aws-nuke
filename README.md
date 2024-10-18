@@ -107,10 +107,10 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | [aws_iam_role.execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.execution_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.task_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.task_additional_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.task_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.task_permissions_arns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_secretsmanager_secret.configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_version.configuration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
 
@@ -124,20 +124,21 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of tags to apply to resources created by this module | `map(string)` | n/a | yes |
 | <a name="input_tasks"></a> [tasks](#input\_tasks) | A collection of nuke tasks to run and when to run them | <pre>map(object({<br/>    additional_permissions = optional(map(object({<br/>      policy = string<br/>    })), {})<br/>    configuration_file      = string<br/>    description             = string<br/>    dry_run                 = optional(bool, true)<br/>    permission_boundary_arn = optional(string, null)<br/>    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br/>    retention_in_days       = optional(number, 7)<br/>    schedule                = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Indicates if the task should be assigned a public IP | `bool` | `false` | no |
+| <a name="input_cloudwatch_event_role_name"></a> [cloudwatch\_event\_role\_name](#input\_cloudwatch\_event\_role\_name) | The name of the role to use for the cloudwatch event rule | `string` | `"nuke-cloudwatch"` | no |
 | <a name="input_configuration_secret_name_prefix"></a> [configuration\_secret\_name\_prefix](#input\_configuration\_secret\_name\_prefix) | The prefix to use for AWS Secrets Manager secrets to store the nuke configuration | `string` | `"/lza/configuration/nuke"` | no |
 | <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | The amount of CPU to allocate to the container | `number` | `256` | no |
 | <a name="input_container_image"></a> [container\_image](#input\_container\_image) | The image to use for the container | `string` | `"ghcr.io/ekristen/aws-nuke"` | no |
 | <a name="input_container_image_tag"></a> [container\_image\_tag](#input\_container\_image\_tag) | The tag to use for the container image | `string` | `"v3.26.0-2-g672408a-amd64"` | no |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | The amount of memory to allocate to the container | `number` | `512` | no |
 | <a name="input_create_kms_key"></a> [create\_kms\_key](#input\_create\_kms\_key) | Indicates if a KMS key should be created for the log group | `bool` | `false` | no |
+| <a name="input_ecs_cluster_name"></a> [ecs\_cluster\_name](#input\_ecs\_cluster\_name) | The name of the ECS cluster we provision run the nuke tasks within | `string` | `"nuke"` | no |
 | <a name="input_enable_container_insights"></a> [enable\_container\_insights](#input\_enable\_container\_insights) | Indicates if container insights should be enabled for the cluster | `bool` | `false` | no |
-| <a name="input_iam_execution_role_prefix"></a> [iam\_execution\_role\_prefix](#input\_iam\_execution\_role\_prefix) | The prefix to use for the IAM execution roles used by the tasks | `string` | `"nuke-execution-"` | no |
-| <a name="input_iam_task_role_prefix"></a> [iam\_task\_role\_prefix](#input\_iam\_task\_role\_prefix) | The prefix to use for the IAM tasg roles used by the tasks | `string` | `"nuke-"` | no |
+| <a name="input_iam_execution_role_prefix"></a> [iam\_execution\_role\_prefix](#input\_iam\_execution\_role\_prefix) | The prefix to use for the IAM execution roles used by the tasks | `string` | `"lza-nuke-execution-"` | no |
+| <a name="input_iam_task_role_prefix"></a> [iam\_task\_role\_prefix](#input\_iam\_task\_role\_prefix) | The prefix to use for the IAM tasg roles used by the tasks | `string` | `"lza-nuke-"` | no |
 | <a name="input_kms_administrator_role_name"></a> [kms\_administrator\_role\_name](#input\_kms\_administrator\_role\_name) | The name of the role to use as the administrator for the KMS key (defaults to account root) | `string` | `null` | no |
 | <a name="input_kms_key_alias"></a> [kms\_key\_alias](#input\_kms\_key\_alias) | The alias to use for the nuke KMS key | `string` | `"nuke"` | no |
 | <a name="input_log_group_kms_key_id"></a> [log\_group\_kms\_key\_id](#input\_log\_group\_kms\_key\_id) | The KMS key id to use for encrypting the log group | `string` | `null` | no |
 | <a name="input_log_group_name_prefix"></a> [log\_group\_name\_prefix](#input\_log\_group\_name\_prefix) | The name of the log group to create | `string` | `"/lza/services/nuke"` | no |
-| <a name="input_name"></a> [name](#input\_name) | The name of the nuke service | `string` | `"nuke-service"` | no |
 
 ## Outputs
 
