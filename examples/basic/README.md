@@ -24,6 +24,7 @@
 | Name | Type |
 |------|------|
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.additional](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -34,6 +35,5 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_secret_arn"></a> [secret\_arn](#output\_secret\_arn) | The ARN of the secret containing the nuke configuration |
 | <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | The subnet id's to use for the nuke service |
 <!-- END_TF_DOCS -->

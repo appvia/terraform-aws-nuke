@@ -15,13 +15,22 @@ run "basic" {
   command = plan
 
   variables {
-    account_id         = "123456789012"
-    region             = "eu-west-1"
-    nuke_configuration = "./examples/basic/assets/nuke-config.yml.example"
-    subnet_ids         = ["subnet-12345678", "subnet-87654321"]
+    account_id = "123456789012"
+    region     = "eu-west-1"
+    subnet_ids = ["subnet-12345678", "subnet-87654321"]
     tags = {
       "Environment" = "Testing"
       "GitRepo"     = "https://github.com/appvia/terraform-aws-dns"
+    }
+
+    tasks = {
+      "nuke" = {
+        configuration_file = "./examples/basic/assets/nuke-config.yml.example"
+        description        = "Nuke the account"
+        dry_run            = false
+        retention_in_days  = 7
+        schedule           = "cron(0 0 * * ? *)"
+      }
     }
   }
 }
