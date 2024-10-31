@@ -92,7 +92,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | 3.1.0 |
+| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | 3.1.1 |
 
 ## Resources
 

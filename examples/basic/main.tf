@@ -58,7 +58,7 @@ module "nuke" {
   tasks = {
     "default" = {
       ## The path to the configuration file for the task
-      configuration_file = "${path.module}/assets/nuke-config.yml.example"
+      configuration = file("${path.module}/assets/nuke-config.yml.example")
       ## A description for the task 
       description = "Runs the actual nuke service, deleting resources"
       ## Indicates if the task should be a dry run (default is true)
@@ -81,7 +81,7 @@ module "nuke" {
 
     "dry-run" = {
       ## The path to the configuration file for the task
-      configuration_file = "${path.module}/assets/nuke-config.yml.example"
+      configuration = file("${path.module}/assets/nuke-config.yml.example")
       ## A description for the task 
       description = "Runs a dry run to validate what would be deleted"
       ## Indicates if the task should be a dry run (default is true)
