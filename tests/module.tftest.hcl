@@ -25,11 +25,11 @@ run "basic" {
 
     tasks = {
       "nuke" = {
-        configuration_file = "./examples/basic/assets/nuke-config.yml.example"
-        description        = "Nuke the account"
-        dry_run            = false
-        retention_in_days  = 7
-        schedule           = "cron(0 0 * * ? *)"
+        configuration     = file("./examples/basic/assets/nuke-config.yml.example")
+        description       = "Nuke the account"
+        dry_run           = false
+        retention_in_days = 7
+        schedule          = "cron(0 0 * * ? *)"
       }
     }
   }

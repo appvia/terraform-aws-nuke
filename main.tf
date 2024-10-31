@@ -48,5 +48,5 @@ resource "aws_secretsmanager_secret_version" "configuration" {
   for_each = var.tasks
 
   secret_id     = aws_secretsmanager_secret.configuration[each.key].id
-  secret_string = templatefile(each.value.configuration_file, local.configuration_data)
+  secret_string = templatestring(each.value.configuration, local.configuration_data)
 }

@@ -33,7 +33,7 @@ variable "tasks" {
     additional_permissions = optional(map(object({
       policy = string
     })), {})
-    configuration_file      = string
+    configuration           = string
     description             = string
     dry_run                 = optional(bool, true)
     permission_boundary_arn = optional(string, null)
@@ -41,6 +41,18 @@ variable "tasks" {
     retention_in_days       = optional(number, 7)
     schedule                = string
   }))
+
+  ## The tast must have a configuration 
+  validation {
+    condition     = alltrue([for task in keys(var.tasks) : contains(keys(var.tasks[task]), "configuration")])
+    error_message = "The task must have a configuration"
+  }
+
+  ## The task configuration must not be empty 
+  validation {
+    condition     = alltrue([for task in keys(var.tasks) : length(var.tasks[task].configuration) > 0])
+    error_message = "The task configuration must not be empty"
+  }
 
   ## The task key must be all lowercase and contain only alpha characters
   validation {
