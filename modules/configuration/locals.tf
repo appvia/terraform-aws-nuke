@@ -8,40 +8,30 @@ locals {
     var.presets
   )
 
+  ## All the resources to include in the configuration, removing any elements 
+  ## that are in the excluded list
+  included_resources = sort(distinct(concat(var.included.all, var.included.add)))
+
+  ## All the resources to exclude from the configuration 
+  excluded_resources = sort(
+    setsubtract(distinct(concat(var.excluded.all, var.excluded.add)), var.excluded.remove)
+  )
+
   ## All the resources, including the filters to apply to them 
   resources = merge({
-    for resource in var.included : resource => var.filters
+    for resource in local.included_resources : resource => var.filters
   })
 
   ## Render the configuration file
   configuration = templatefile("${path.module}/assets/config.yml", {
-    accounts  = var.accounts
-    blocklist = var.blocklist
-    excluded  = var.excluded
+    accounts  = sort(distinct(var.accounts))
+    blocklist = sort(distinct(var.blocklist))
+    excluded  = local.excluded_resources
     included  = local.resources
     presets   = local.presets
-    regions   = var.regions
+    regions   = sort(distinct(var.regions))
   })
 
-  #accounts:
-  #  %{ for account in accounts ~}
-  #  ${account}:
-  #    presets:
-  #      %{ for preset_name, preset_filters in presets ~}
-  #      - ${preset_name}
-  #      %{ endfor ~}
-  #
-  #    filters:
-  #      %{ for resource, filters in included ~}
-  #      ${resource}:
-  #        %{ for filter in filters ~}
-  #        - property: ${filter.property}
-  #          type: ${filter.type}
-  #          value: ${filter.value}
-  #        %{ endfor ~}
-  #      %{ endfor ~}
-  #  %{ endfor ~}
-  #
   ## The filters for control tower
   control_tower_presets = {
     CloudWatchLogsLogGroup = [

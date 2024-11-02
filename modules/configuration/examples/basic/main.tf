@@ -31,6 +31,11 @@ module "configuration" {
     }
   }
 
+  excluded = {
+    add    = ["WorkSpacesWorkspace"]
+    remove = ["IAMUser"]
+  }
+
   filters = [
     {
       property = "tag:Environment"
