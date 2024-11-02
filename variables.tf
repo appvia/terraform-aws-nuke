@@ -41,6 +41,7 @@ variable "tasks" {
     retention_in_days       = optional(number, 7)
     schedule                = string
   }))
+  sensitive = true
 
   ## The tast must have a configuration 
   validation {

@@ -103,7 +103,6 @@ resource "aws_ecs_task_definition" "tasks" {
       name                   = format("nuke-%s", each.key)
       cpu                    = var.container_cpu
       entryPoint             = ["/bin/sh", "-c"]
-      environment            = []
       essential              = true
       image                  = format("%s:%s", var.container_image, var.container_image_tag)
       memory                 = var.container_memory
@@ -126,10 +125,10 @@ resource "aws_ecs_task_definition" "tasks" {
         "echo '[AWS-NUKE] TASK COMPLETE'",
       ])]
 
-      secrets = [
+      environment = [
         {
-          name      = "NUKE_CONFIG"
-          valueFrom = base64encode(templatestring(each.value.configuration, local.configuration_data))
+          name  = "NUKE_CONFIG"
+          value = base64encode(templatestring(each.value.configuration, local.configuration_data))
         }
       ]
 
