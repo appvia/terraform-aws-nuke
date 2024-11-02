@@ -128,7 +128,7 @@ resource "aws_ecs_task_definition" "tasks" {
       environment = [
         {
           name  = "NUKE_CONFIG"
-          value = base64encode(templatestring(each.value.configuration, local.configuration_data))
+          value = templatestring(each.value.configuration, local.configuration_data)
         }
       ]
 
