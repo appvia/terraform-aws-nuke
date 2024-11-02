@@ -48,21 +48,133 @@ module "vpc" {
 module "nuke" {
   source = "github.com/appvia/terraform-aws-nuke?ref=main"
 
+  ## The account id we are running in
+  account_id = data.aws_caller_identity.current.account_id
   ## Indicates if the KMS key should be created for the log group
   create_kms_key = false
-  ## Indicates if we should skips deletion (default is false)
-  enable_deletion = false
-  ## This is the location of the aws-nuke configuration file, this is
-  ## copied into the container via a parameter store value
-  nuke_configuration = "${path.module}/assets/nuke-config.yml.example"
-  ## This will create a task that runs every day at midnight
-  schedule_expression = "cron(0 0 * * ? *)"
-  ## Name of the secret (AWS Secrets Manager) to store the configuration in
-  configuration_secret_name = "sandbox/nuke"
+  ## The region to use for the resources
+  region = data.aws_region.current.name
   ## The ssubnet_ids to use for the nuke service
   subnet_ids = module.vpc.public_subnet_ids
   ## The tags for the resources created by this module
   tags = local.tags
+
+  ## The docker image to use for the nuke service - NOTE: we would recommend you
+  ## build and push this image to you own registry
+  container_image = "ghcr.io/ekristen/aws-nuke"
+  ## The tag to use for the container image
+  container_image_tag = "v3.26.0-2-g672408a-amd64"
+
+  tasks = {
+    "default" = {
+      ## The path to the configuration file for the task
+      configuration = file("${path.module}/assets/nuke-config.yml.example")
+      ## A description for the task
+      description = "Runs the actual nuke service, deleting resources"
+      ## Indicates if the task should be a dry run (default is true)
+      dry_run = false
+      ## The log retention in days for the task
+      retention_in_days = 7
+      ## The schedule expression for the task, every friday at 10:00
+      schedule = "cron(0 10 ? * FRI *)"
+      ## The IAM permissions to attach to the task role
+      permission_arns = [
+        "arn:aws:iam::aws:policy/AdministratorAccess"
+      ]
+      ## Additional inline permissions
+      additional_permissions = {
+        "secrets" = {
+          policy = data.aws_iam_policy_document.additional.json
+        }
+      }
+    }
+  }
+}
+```
+
+Yon can find a full example in the [examples/basic](./examples/basic) directory.
+
+## Configuration Module
+
+The repository also includes a helper [configuration](./modules/configuration) module that can be used to render a nuke configuration. An example of how to use the module can be found below
+
+```hcl
+module "configuration" {
+  source = "../.."
+
+  accounts = [123456789012, 123456789013]
+  regions  = ["us-east-1", "us-west-2"]
+
+  presets = {
+    "default" = {
+      "IAMRole" = [
+        {
+          property = "roleName"
+          type     = "regex"
+          value    = "^AWSControlTower.*"
+        }
+      ]
+    }
+  }
+
+  filters = [
+    {
+      property = "tag:Environment"
+      type     = "string"
+      value    = "Sandbox"
+    },
+    {
+      property = "tag:Owner"
+      type     = "string"
+      value    = "Support"
+    }
+  ]
+
+  include_presets = {
+    enable_control_tower     = true
+    enable_cost_intelligence = true
+    enable_landing_zone      = true
+  }
+}
+
+module "nuke" {
+  source = "github.com/appvia/terraform-aws-nuke?ref=main"
+
+  ## The account id we are running in
+  account_id = data.aws_caller_identity.current.account_id
+  ## Indicates if the KMS key should be created for the log group
+  create_kms_key = false
+  ## The region to use for the resources
+  region = data.aws_region.current.name
+  ## The ssubnet_ids to use for the nuke service
+  subnet_ids = module.vpc.public_subnet_ids
+  ## The tags for the resources created by this module
+  tags = local.tags
+
+  tasks = {
+    "default" = {
+      ## The path to the configuration file for the task
+      configuration = module.configuration.configuration
+      ## A description for the task
+      description = "Runs the actual nuke service, deleting resources"
+      ## Indicates if the task should be a dry run (default is true)
+      dry_run = false
+      ## The log retention in days for the task
+      retention_in_days = 7
+      ## The schedule expression for the task, every friday at 10:00
+      schedule = "cron(0 10 ? * FRI *)"
+      ## The IAM permissions to attach to the task role
+      permission_arns = [
+        "arn:aws:iam::aws:policy/AdministratorAccess"
+      ]
+      ## Additional inline permissions
+      additional_permissions = {
+        "secrets" = {
+          policy = data.aws_iam_policy_document.additional.json
+        }
+      }
+    }
+  }
 }
 ```
 
@@ -147,3 +259,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="output_kms_key_arn"></a> [kms\_key\_arn](#output\_kms\_key\_arn) | The KMS key ARN used for the nuke service, if created |
 | <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | The KMS key ID used for the nuke service, if created |
 <!-- END_TF_DOCS -->
+
+```
+
+```
