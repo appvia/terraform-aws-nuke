@@ -218,13 +218,10 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | [aws_iam_role.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
 | [aws_iam_role.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
 | [aws_iam_role.task](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.execution_secrets](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.task_additional_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.task_permissions_arns](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_secretsmanager_secret.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret) | resource |
-| [aws_secretsmanager_secret_version.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret_version) | resource |
 
 ## Inputs
 
@@ -237,7 +234,6 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_tasks"></a> [tasks](#input\_tasks) | A collection of nuke tasks to run and when to run them | <pre>map(object({<br/>    additional_permissions = optional(map(object({<br/>      policy = string<br/>    })), {})<br/>    configuration           = string<br/>    description             = string<br/>    dry_run                 = optional(bool, true)<br/>    permission_boundary_arn = optional(string, null)<br/>    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br/>    retention_in_days       = optional(number, 7)<br/>    schedule                = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Indicates if the task should be assigned a public IP | `bool` | `false` | no |
 | <a name="input_cloudwatch_event_role_name"></a> [cloudwatch\_event\_role\_name](#input\_cloudwatch\_event\_role\_name) | The name of the role to use for the cloudwatch event rule | `string` | `"nuke-cloudwatch"` | no |
-| <a name="input_configuration_secret_name_prefix"></a> [configuration\_secret\_name\_prefix](#input\_configuration\_secret\_name\_prefix) | The prefix to use for AWS Secrets Manager secrets to store the nuke configuration | `string` | `"/lza/configuration/nuke"` | no |
 | <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | The amount of CPU to allocate to the container | `number` | `256` | no |
 | <a name="input_container_image"></a> [container\_image](#input\_container\_image) | The image to use for the container | `string` | `"ghcr.io/ekristen/aws-nuke"` | no |
 | <a name="input_container_image_tag"></a> [container\_image\_tag](#input\_container\_image\_tag) | The tag to use for the container image | `string` | `"v3.26.0-2-g672408a-amd64"` | no |

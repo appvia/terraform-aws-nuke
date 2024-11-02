@@ -84,29 +84,6 @@ resource "aws_iam_role_policy_attachment" "execution" {
   role       = aws_iam_role.execution[each.key].name
 }
 
-
-## Allow the ECS task to retrieve the secret from the secrets manager 
-resource "aws_iam_role_policy" "execution_secrets" {
-  for_each = var.tasks
-
-  name = "allow-secretmanager-readonly"
-  role = aws_iam_role.execution[each.key].name
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid    = "AllowSecretsManager",
-        Action = ["secretsmanager:GetSecretValue"],
-        Effect = "Allow",
-        Resource = [
-          aws_secretsmanager_secret.configuration[each.key].arn,
-        ]
-      }
-    ]
-  })
-}
-
 ## Provision the task definition for the nuke (aws-nuke) to remove all the resources, 
 ## Also, we mount the secret from secrets manager to the task 
 resource "aws_ecs_task_definition" "tasks" {
@@ -138,7 +115,7 @@ resource "aws_ecs_task_definition" "tasks" {
 
       command = [join("; ", [
         "echo '[AWS-NUKE] RUNNING TASK'",
-        "echo \"$NUKE_CONFIG\" > /tmp/config.yml",
+        "echo -n \"$NUKE_CONFIG\" | base64 -d > /tmp/config.yml",
         join(" ", [
           "/usr/local/bin/aws-nuke run",
           "--config /tmp/config.yml",
@@ -152,7 +129,7 @@ resource "aws_ecs_task_definition" "tasks" {
       secrets = [
         {
           name      = "NUKE_CONFIG"
-          valueFrom = aws_secretsmanager_secret_version.configuration[each.key].arn
+          valueFrom = base64encode(templatestring(each.value.configuration, local.configuration_data))
         }
       ]
 
