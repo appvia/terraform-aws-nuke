@@ -132,6 +132,12 @@ variable "log_group_kms_key_id" {
   default     = null
 }
 
+variable "configuration_secret_name_prefix" {
+  description = "The prefix to use for AWS Secrets Manager secrets to store the nuke configuration"
+  type        = string
+  default     = "/lza/configuration/nuke"
+}
+
 variable "iam_execution_role_prefix" {
   description = "The prefix to use for the IAM execution roles used by the tasks"
   type        = string

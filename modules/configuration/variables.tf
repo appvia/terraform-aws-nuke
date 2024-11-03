@@ -40,7 +40,7 @@ variable "include_presets" {
 }
 
 variable "filters" {
-  description = "A collection of filters are applied to all resources"
+  description = "A collection of global filters are applied to all resources"
   type = list(object({
     property = string
     type     = string
