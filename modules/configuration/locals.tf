@@ -26,6 +26,7 @@ locals {
   configuration = templatefile("${path.module}/assets/config.yml", {
     accounts  = sort(distinct(var.accounts))
     blocklist = sort(distinct(var.blocklist))
+    global    = var.filters
     excluded  = local.excluded_resources
     included  = local.resources
     presets   = local.presets

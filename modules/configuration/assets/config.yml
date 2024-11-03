@@ -29,6 +29,15 @@ resource-types:
     %{ endfor ~}
 
 presets:
+  %{ if length(global) > 0 }default:
+    filters:
+      __global__:
+        %{ for filter in global }- property: "${filter.property}"
+          type: "${filter.type}"
+          value: "${filter.value}"
+        %{ endfor }
+  %{ endif }
+
   %{ for preset_name in keys(presets) }
   ${preset_name}:
     filters:
@@ -46,12 +55,5 @@ accounts:
   %{ for account in accounts }${account}:
     presets:
       %{ for name in keys(presets) ~}- ${name}
-      %{ endfor }
-    filters:
-      %{ for resource, filters in included ~}${resource}:
-        %{ for filter in filters ~}- property: "${filter.property}"
-          type: "${filter.type}"
-          value: "${filter.value}"
-        %{ endfor }
       %{ endfor }
   %{ endfor }
