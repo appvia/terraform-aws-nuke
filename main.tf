@@ -24,7 +24,7 @@ resource "aws_secretsmanager_secret" "configuration" {
   for_each = var.tasks
 
   description             = format("Contains the configuration yaml for the aws-nuke '%s' task", each.key)
-  name                    = format("%s/%s", var.configuration_secret_name_prefix, each.key)
+  name_prefix             = format("%s/%s", var.configuration_secret_name_prefix, each.key)
   recovery_window_in_days = 0
   tags                    = var.tags
 
