@@ -39,8 +39,9 @@ presets:
         %{ for filter in filters ~}- property: "${filter.property}"
           type: "${filter.type}"
           value: "${filter.value}"
+          %{ if try(filter.invert, null) != null }}invert: ${filter.invert}%{ endif }
         %{ endfor }
-      %{ endfor ~}
+      %{ endfor }
   %{ endfor }
 
 ## Iteratation of all the accounts, the resources and the filters 

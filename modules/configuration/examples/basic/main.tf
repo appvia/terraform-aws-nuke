@@ -39,12 +39,12 @@ module "configuration" {
   filters = [
     {
       property = "tag:Environment"
-      type     = "string"
+      type     = "exact"
       value    = "Sandbox"
     },
     {
       property = "tag:Owner"
-      type     = "string"
+      type     = "exact"
       value    = "Support"
     }
   ]

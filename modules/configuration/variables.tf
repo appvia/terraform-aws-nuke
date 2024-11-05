@@ -42,11 +42,18 @@ variable "include_presets" {
 variable "filters" {
   description = "A collection of global filters are applied to all resources"
   type = list(object({
+    invert   = optional(bool, null)
     property = string
     type     = string
     value    = string
   }))
   default = []
+
+  # type must be exact, contains, glob, regex, dateOlderThan or dateOlderThanNow 
+  validation {
+    condition     = length([for f in var.filters : f if f.type == "exact" || f.type == "contains" || f.type == "glob" || f.type == "regex" || f.type == "dateOlderThan" || f.type == "dateOlderThanNow"]) == length(var.filters)
+    error_message = "Invalid filter type. Must be exact, contains, glob, regex, dateOlderThan or dateOlderThanNow"
+  }
 }
 
 variable "included" {
