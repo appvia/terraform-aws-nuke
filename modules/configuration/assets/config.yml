@@ -1,10 +1,4 @@
 ---
-#
-## The configuration has been automatically generated - please do not 
-## modify it manually. Instead, use the `config.yml` file in the root
-## of the repository to update the configuration.
-#
-
 blocklist:
   %{ for account in blocklist }- ${account}%{ endfor }
 
