@@ -218,6 +218,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | [aws_iam_role.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
 | [aws_iam_role.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
 | [aws_iam_role.task](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.execution_ecr](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.execution_secrets](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.task_additional_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
