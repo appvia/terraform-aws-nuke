@@ -25,8 +25,8 @@ variable "presets" {
   default = {}
 }
 
-variable "include_presets" {
-  description = "A collection of preset filters to use for nuke"
+variable "include_filters" {
+  description = "A collection of predefined filters to use for nuke"
   type = object({
     enable_control_tower     = optional(bool, true)
     enable_cost_intelligence = optional(bool, true)

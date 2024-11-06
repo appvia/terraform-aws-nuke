@@ -20,7 +20,7 @@ module "configuration" {
   regions  = ["us-east-1", "us-west-2"]
 
   presets = {
-    "default" = {
+    "landing_zone" = {
       "IAMRole" = [
         {
           property = "roleName"
@@ -49,7 +49,7 @@ module "configuration" {
     }
   ]
 
-  include_presets = {
+  include_filters = {
     enable_control_tower     = true
     enable_cost_intelligence = true
     enable_landing_zone      = true

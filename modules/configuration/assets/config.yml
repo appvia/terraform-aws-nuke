@@ -23,7 +23,7 @@ resource-types:
     %{ endfor ~}
 
 presets:
-  %{ if length(global) > 0 }default:
+  %{ if length(global) > 0 }global:
     filters:
       __global__:
         %{ for filter in global }- property: "${filter.property}"
@@ -43,12 +43,12 @@ presets:
         %{ endfor }
       %{ endfor }
   %{ endfor }
-
 ## Iteratation of all the accounts, the resources and the filters 
 ## we should apply against those resources
 accounts:
   %{ for account in accounts }${account}:
     presets:
+      - %{ if length(global) > 0 }global%{ endif }
       %{ for name in keys(presets) ~}- ${name}
       %{ endfor }
   %{ endfor }
