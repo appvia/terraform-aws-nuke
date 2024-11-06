@@ -25,17 +25,17 @@ run "module_configuration" {
     filters = [
       {
         property = "tag:Environment"
-        type     = "string"
+        type     = "exact"
         value    = "Sandbox"
       },
       {
         property = "tag:Owner"
-        type     = "string"
+        type     = "exact"
         value    = "Support"
       }
     ]
 
-    include_presets = {
+    include_filters = {
       enable_control_tower     = true
       enable_cost_intelligence = true
       enable_landing_zone      = true
