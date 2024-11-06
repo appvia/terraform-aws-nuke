@@ -84,6 +84,25 @@ resource "aws_iam_role_policy_attachment" "execution" {
   role       = aws_iam_role.execution[each.key].name
 }
 
+## Allow the ECS task access to the ECR repository to pull the image 
+resource "aws_iam_role_policy" "execution_ecr" {
+  for_each = var.tasks
+
+  name = "allow-ecr-pull"
+  role = aws_iam_role.execution[each.key].name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid      = "AllowECRPull",
+        Action   = ["ecr:GetAuthorizationToken", "ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
 
 ## Allow the ECS task to retrieve the secret from the secrets manager 
 resource "aws_iam_role_policy" "execution_secrets" {
