@@ -37,24 +37,29 @@ locals {
   control_tower_filters = [
     {
       property = "logGroupName"
-      type     = "contains"
-      value    = "aws-landing-zone"
+      type     = "regex"
+      value    = ".*(aws-landing-zone|aws-controltower).*"
     },
     {
-      property = "roleName"
+      property = "RoleName"
       type     = "regex"
       value    = "^(aws-controltower|AWSControlTower).*"
     },
     {
-      property = "functionName"
-      type     = "regex"
-      value    = "^aws-controltower.*"
-    },
-    {
-      property = "topicArn"
+      property = "FunctionName"
       type     = "contains"
       value    = "aws-controltower"
     },
+    {
+      property = "TopicARN"
+      type     = "contains"
+      value    = "aws-controltower"
+    },
+    {
+      property = "Name"
+      type     = "regex"
+      value    = "^aws-controltower.*"
+    }
   ]
 
   ## Cost Intelligence filters 
