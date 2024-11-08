@@ -41,6 +41,11 @@ locals {
       value    = ".*(aws-landing-zone|aws-controltower).*"
     },
     {
+      property = "Name"
+      type     = "regex"
+      value    = "^(aws-controltower|AWSControlTower|AWSControlTowerExecution).*"
+    },
+    {
       property = "RoleName"
       type     = "regex"
       value    = "^(aws-controltower|AWSControlTower|AWSControlTowerExecution).*"
