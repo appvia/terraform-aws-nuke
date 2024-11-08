@@ -43,7 +43,7 @@ locals {
     {
       property = "RoleName"
       type     = "regex"
-      value    = "^(aws-controltower|AWSControlTower).*"
+      value    = "^(aws-controltower|AWSControlTower|AWSControlTowerExecution).*"
     },
     {
       property = "FunctionName"
