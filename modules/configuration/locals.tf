@@ -5,7 +5,7 @@ locals {
     var.include_filters.enable_control_tower ? local.control_tower_filters : [],
     var.include_filters.enable_cost_intelligence ? local.cost_intelligence_filters : [],
     var.include_filters.enable_landing_zone ? local.landing_zone_filters : [],
-    var.include_filters.enable_aws_managed_services ? local.aws_managed_services_filters : [],
+    var.include_filters.enable_aws_managed ? local.aws_managed_services_filters : [],
     var.filters
   )
 
