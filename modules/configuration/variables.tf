@@ -28,11 +28,13 @@ variable "presets" {
 variable "include_filters" {
   description = "A collection of predefined filters to use for nuke"
   type = object({
+    enable_aws_managed       = optional(bool, true)
     enable_control_tower     = optional(bool, true)
     enable_cost_intelligence = optional(bool, true)
     enable_landing_zone      = optional(bool, true)
   })
   default = {
+    enable_aws_managed       = true
     enable_control_tower     = true
     enable_cost_intelligence = true
     enable_landing_zone      = true
