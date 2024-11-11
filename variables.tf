@@ -27,6 +27,12 @@ variable "cloudwatch_event_role_name" {
   default     = "nuke-cloudwatch"
 }
 
+variable "cloudwatch_event_rule_prefix" {
+  description = "The prefix to use for the cloudwatch event rule"
+  type        = string
+  default     = "lza-nuke"
+}
+
 variable "tasks" {
   description = "A collection of nuke tasks to run and when to run them"
   type = map(object({
