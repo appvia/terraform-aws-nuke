@@ -67,8 +67,8 @@ module "lambda_function" {
 
   ## Envionment variables for the Lambda function
   environment_variables = {
-    "LOG_GROUP_ARN" = aws_cloudwatch_log_group.tasks[each.key].arn
-    "SNS_TOPIC_ARN" = each.value.sns_topic_arn
+    "LOG_GROUP_NAME" = aws_cloudwatch_log_group.tasks[each.key].name
+    "SNS_TOPIC_ARN"  = each.value.sns_topic_arn
   }
 }
 

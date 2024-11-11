@@ -12,7 +12,6 @@ import logging
 import boto3
 
 # Initialize AWS clients
-ecs_client = boto3.client('ecs')
 logs_client = boto3.client('logs')
 sns_client = boto3.client('sns')
 
@@ -79,3 +78,9 @@ def lambda_handler(event, context):
             Message=message,
             Subject="AWS Nuke - Resource Deletion Notification"
         )
+
+
+# If not being called from the lambda_handler, but via the CLI,
+# we need to call the lambda_handler
+if __name__ == '__main__':
+    lambda_handler(None, None)
