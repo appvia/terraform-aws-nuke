@@ -205,12 +205,15 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | 3.1.1 |
+| <a name="module_lambda_function"></a> [lambda\_function](#module\_lambda\_function) | terraform-aws-modules/lambda/aws | 7.14.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [aws_cloudwatch_event_rule.ecs_task_stopped_rule](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_rule.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_rule) | resource |
+| [aws_cloudwatch_event_target.invoke_lambda](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_event_target.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_target) | resource |
 | [aws_cloudwatch_log_group.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_log_group) | resource |
 | [aws_ecs_cluster.current](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/ecs_cluster) | resource |
@@ -224,6 +227,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | [aws_iam_role_policy_attachment.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.task_permissions_arns](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_lambda_permission.allow_eventbridge](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/lambda_permission) | resource |
 | [aws_secretsmanager_secret.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_version.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret_version) | resource |
 
@@ -235,7 +239,7 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="input_region"></a> [region](#input\_region) | The region to use for the resources | `string` | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | The subnet id's to use for the nuke service | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of tags to apply to resources created by this module | `map(string)` | n/a | yes |
-| <a name="input_tasks"></a> [tasks](#input\_tasks) | A collection of nuke tasks to run and when to run them | <pre>map(object({<br/>    additional_permissions = optional(map(object({<br/>      policy = string<br/>    })), {})<br/>    configuration           = string<br/>    description             = string<br/>    dry_run                 = optional(bool, true)<br/>    permission_boundary_arn = optional(string, null)<br/>    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br/>    retention_in_days       = optional(number, 7)<br/>    schedule                = string<br/>  }))</pre> | n/a | yes |
+| <a name="input_tasks"></a> [tasks](#input\_tasks) | A collection of nuke tasks to run and when to run them | <pre>map(object({<br/>    additional_permissions = optional(map(object({<br/>      policy = string<br/>    })), {})<br/>    configuration = string<br/>    description   = string<br/>    dry_run       = optional(bool, true)<br/>    notifications = optional(object({<br/>      sns_topic_arn = optional(string, null)<br/>      }), {<br/>      sns_topic_arn = null<br/>    })<br/>    permission_boundary_arn = optional(string, null)<br/>    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])<br/>    retention_in_days       = optional(number, 7)<br/>    schedule                = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Indicates if the task should be assigned a public IP | `bool` | `false` | no |
 | <a name="input_cloudwatch_event_role_name"></a> [cloudwatch\_event\_role\_name](#input\_cloudwatch\_event\_role\_name) | The name of the role to use for the cloudwatch event rule | `string` | `"nuke-cloudwatch"` | no |
 | <a name="input_configuration_secret_name_prefix"></a> [configuration\_secret\_name\_prefix](#input\_configuration\_secret\_name\_prefix) | The prefix to use for AWS Secrets Manager secrets to store the nuke configuration | `string` | `"/lza/configuration/nuke"` | no |

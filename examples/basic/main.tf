@@ -86,6 +86,11 @@ module "nuke" {
       description = "Runs a dry run to validate what would be deleted"
       ## Indicates if the task should be a dry run (default is true)
       dry_run = true
+      ## The configuration for a notification to be sent 
+      notifications = {
+        ## The SNS topic to send the notification to
+        sns_topic_arn = "arn:aws:sns:eu-west-1:123456789012:nuke-dry-run"
+      }
       ## The log retention in days for the task 
       retention_in_days = 7
       ## The schedule expression for the task - every monday at 09:00

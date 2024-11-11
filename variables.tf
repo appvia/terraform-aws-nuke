@@ -33,9 +33,14 @@ variable "tasks" {
     additional_permissions = optional(map(object({
       policy = string
     })), {})
-    configuration           = string
-    description             = string
-    dry_run                 = optional(bool, true)
+    configuration = string
+    description   = string
+    dry_run       = optional(bool, true)
+    notifications = optional(object({
+      sns_topic_arn = optional(string, null)
+      }), {
+      sns_topic_arn = null
+    })
     permission_boundary_arn = optional(string, null)
     permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     retention_in_days       = optional(number, 7)
