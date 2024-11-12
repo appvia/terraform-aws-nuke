@@ -28,7 +28,7 @@ module "lambda_function" {
     }
     "filters" = {
       actions   = ["logs:FilterLogEvents"]
-      resources = [format("arn:aws:logs:%s:%s:log-group:%s/%s:*", var.region, var.account_id, var.log_group_name_prefix), each.key]
+      resources = [format("arn:aws:logs:%s:%s:log-group:%s/%s:*", var.region, var.account_id, var.log_group_name_prefix, each.key)]
       effect    = "Allow"
     }
   }
