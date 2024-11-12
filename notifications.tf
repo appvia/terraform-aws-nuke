@@ -1,6 +1,6 @@
 
 ## Configure the lambda function to be triggered by the event bridge rule 
-module "lambda_function" {
+module "notification" {
   for_each = local.tasks_with_notifications
   source   = "terraform-aws-modules/lambda/aws"
   version  = "7.14.0"
@@ -75,7 +75,7 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
-  function_name = module.lambda_function[each.key].lambda_function_name
+  function_name = module.notifications[each.key].lambda_function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].arn
 }
@@ -84,6 +84,6 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 resource "aws_cloudwatch_event_target" "invoke_lambda" {
   for_each = local.tasks_with_notifications
 
-  arn  = module.lambda_function[each.key].lambda_function_arn
+  arn  = module.notifications[each.key].lambda_function_arn
   rule = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].name
 }
