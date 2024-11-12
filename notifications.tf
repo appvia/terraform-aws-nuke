@@ -28,7 +28,7 @@ module "lambda_function" {
     }
     "filters" = {
       actions   = ["logs:FilterLogEvents"]
-      resources = [aws_cloudwatch_log_group.tasks[each.key].arn]
+      resources = [format("arn:aws:logs:%s:%s:log-group:%s/%s:*", var.region, var.account_id, var.log_group_name_prefix), each.key]
       effect    = "Allow"
     }
   }
@@ -42,7 +42,7 @@ module "lambda_function" {
 
   ## Envionment variables for the Lambda function
   environment_variables = {
-    "LOG_GROUP_NAME" = aws_cloudwatch_log_group.tasks[each.key].name
+    "LOG_GROUP_NAME" = format("%s/%s", var.log_group_name_prefix, each.key)
     "SNS_TOPIC_ARN"  = each.value.notifications.sns_topic_arn
   }
 }
