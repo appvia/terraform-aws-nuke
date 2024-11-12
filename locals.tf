@@ -15,7 +15,7 @@ locals {
   }
 
   ## A map of tasks with notifications enabled 
-  tasks_with_notifications = { for task in var.tasks : task => task if try(task.notifications.sns_topic_arn, null) != null }
+  tasks_with_notifications = { for k, v in var.tasks : k => v if try(v.notifications.sns_topic_arn, null) != null }
 
   ## We need to create a map of task->permission_arn for every task 
   task_permissions_all = flatten([
