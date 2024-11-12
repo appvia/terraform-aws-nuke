@@ -55,7 +55,7 @@ resource "aws_cloudwatch_event_target" "tasks" {
 
   arn       = aws_ecs_cluster.current.arn
   role_arn  = aws_iam_role.cloudwatch.arn
-  rule      = format("%s-%s", var.cloudwatch_event_rule_prefix, aws_cloudwatch_event_rule.tasks[each.key].name)
+  rule      = aws_cloudwatch_event_rule.tasks[each.key].name
   target_id = format("nuke-%s", each.key)
 
   ecs_target {
