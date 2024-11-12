@@ -33,7 +33,7 @@ module "lambda_function" {
   handler        = "lambda_function.lambda_handler"
   memory_size    = "128"
   runtime        = "python3.9"
-  source_path    = format("%s/assets/functions/notification.py", path.module)
+  source_path    = format("%s/assets/lambda/notification.py", path.module)
   tags           = var.tags
   timeout        = 10
 
