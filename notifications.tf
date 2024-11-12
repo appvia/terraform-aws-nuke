@@ -42,7 +42,7 @@ module "lambda_function" {
       "Sid" : "AllowPublishToSNS",
       "Effect" : "Allow",
       "Action" : "sns:Publish",
-      "Resource" : each.value.sns_topic_arn
+      "Resource" : each.value.notifications.sns_topic_arn
     }),
     jsonencode({
       "Sid" : "AllowDescribeLogGroups",
