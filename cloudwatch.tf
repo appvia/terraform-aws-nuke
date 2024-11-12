@@ -43,7 +43,7 @@ resource "aws_cloudwatch_log_group" "tasks" {
 resource "aws_cloudwatch_event_rule" "tasks" {
   for_each = var.tasks
 
-  name                = each.key
+  name                = format("%s-%s", var.cloudwatch_event_rule_prefix, each.key)
   description         = each.value.description
   schedule_expression = each.value.schedule
   tags                = var.tags

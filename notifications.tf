@@ -37,26 +37,30 @@ module "lambda_function" {
   tags           = var.tags
   timeout        = 10
 
-  policy_jsons = [
-    jsonencode({
-      "Sid" : "AllowPublishToSNS",
-      "Effect" : "Allow",
-      "Action" : "sns:Publish",
-      "Resource" : each.value.notifications.sns_topic_arn
-    }),
-    jsonencode({
-      "Sid" : "AllowDescribeLogGroups",
-      "Effect" : "Allow",
-      "Action" : "logs:DescribeLogGroups",
-      "Resource" : "*"
-    }),
-    jsonencode({
-      "Sid" : "AllowQueryLogGroups",
-      "Effect" : "Allow",
-      "Action" : "logs:FilterLogEvents",
-      "Resource" : aws_cloudwatch_log_group.tasks[each.key].arn
-    }),
-  ]
+  allowed_triggers = {
+    "cloudwatch_rule" = {
+      principal = "events.amazonaws.com"
+      rule      = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].arn
+    }
+  }
+
+  policy_statements = {
+    "sns" = {
+      actions   = ["sns:Publish"]
+      resources = [each.value.notifications.sns_topic_arn]
+      effect    = "Allow"
+    },
+    "logs" = {
+      actions   = ["logs:DescribeLogStreams", "logs:DescribeLogGroups"]
+      resources = ["*"]
+      effect    = "Allow"
+    }
+    "filters" = {
+      actions   = ["logs:FilterLogEvents"]
+      resources = [aws_cloudwatch_log_group.tasks[each.key].arn]
+      effect    = "Allow"
+    }
+  }
 
   ## We are using the log group created above to ensure we control the 
   ## configuration and the retention period of the logs
