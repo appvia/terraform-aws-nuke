@@ -1,26 +1,4 @@
 
-## Configure a event bridge rule to trigger a lambda function when an ECS task stops
-resource "aws_cloudwatch_event_rule" "ecs_task_stopped_rule" {
-  for_each = local.tasks_with_notifications
-
-  name          = "lza-ecs-task-stopped-${lower(each.key)}-"
-  description   = "Trigger Lambda when an ECS task in the specified cluster stops."
-  force_destroy = true
-  tags          = var.tags
-
-  event_pattern = jsonencode({
-    "source" : ["aws.ecs"],
-    "detail-type" : ["ECS Task State Change"],
-    "detail" : {
-      "clusterArn" : [aws_ecs_cluster.current.arn],
-      "lastStatus" : ["STOPPED"],
-      "taskDefinitionArn" : [{
-        "prefix" : each.key
-      }]
-    }
-  })
-}
-
 ## Configure the lambda function to be triggered by the event bridge rule 
 module "lambda_function" {
   for_each = local.tasks_with_notifications
@@ -69,6 +47,28 @@ module "lambda_function" {
   }
 }
 
+## Configure a event bridge rule to trigger a lambda function when an ECS task stops
+resource "aws_cloudwatch_event_rule" "ecs_task_stopped_rule" {
+  for_each = local.tasks_with_notifications
+
+  name          = "lza-nuke-notification-${lower(each.key)}"
+  description   = "Trigger Lambda when an ECS task in the specified cluster stops."
+  force_destroy = true
+  tags          = var.tags
+
+  event_pattern = jsonencode({
+    "source" : ["aws.ecs"],
+    "detail-type" : ["ECS Task State Change"],
+    "detail" : {
+      "clusterArn" : [aws_ecs_cluster.current.arn],
+      "lastStatus" : ["STOPPED"],
+      "taskDefinitionArn" : [{
+        "prefix" : each.key
+      }]
+    }
+  })
+}
+
 ## Allow the event bridge rule to trigger the lambda function 
 resource "aws_lambda_permission" "allow_eventbridge" {
   for_each = local.tasks_with_notifications
@@ -84,6 +84,6 @@ resource "aws_lambda_permission" "allow_eventbridge" {
 resource "aws_cloudwatch_event_target" "invoke_lambda" {
   for_each = local.tasks_with_notifications
 
-  rule = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].name
   arn  = module.lambda_function[each.key].lambda_function_arn
+  rule = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].name
 }
