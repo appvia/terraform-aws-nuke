@@ -3,7 +3,7 @@
 resource "aws_cloudwatch_event_rule" "ecs_task_stopped_rule" {
   for_each = local.tasks_with_notifications
 
-  name_prefix   = "lza-ecs-task-stopped-${lower(each.key)}-"
+  name          = "lza-ecs-task-stopped-${lower(each.key)}-"
   description   = "Trigger Lambda when an ECS task in the specified cluster stops."
   force_destroy = true
   tags          = var.tags
@@ -29,20 +29,13 @@ module "lambda_function" {
 
   create_package = true
   description    = "Send notifications on the intention to delete resources"
-  function_name  = format("lza-nuke-notifications-%s", lower(each.key))
+  function_name  = format("lza-nuke-notification-%s", lower(each.key))
   handler        = "lambda_function.lambda_handler"
   memory_size    = "128"
   runtime        = "python3.9"
   source_path    = format("%s/assets/lambda/notification.py", path.module)
   tags           = var.tags
   timeout        = 10
-
-  allowed_triggers = {
-    "cloudwatch_rule" = {
-      principal = "events.amazonaws.com"
-      rule      = aws_cloudwatch_event_rule.ecs_task_stopped_rule[each.key].arn
-    }
-  }
 
   policy_statements = {
     "sns" = {
