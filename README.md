@@ -187,49 +187,11 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 3. Run `terraform-docs markdown table --output-file ${PWD}/README.md --output-mode inject .`
 
 <!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.7 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | = 5.70.0 |
-
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | = 5.70.0 |
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | 3.1.1 |
-| <a name="module_lambda_function"></a> [lambda\_function](#module\_lambda\_function) | terraform-aws-modules/lambda/aws | 7.14.0 |
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [aws_cloudwatch_event_rule.ecs_task_stopped_rule](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_rule) | resource |
-| [aws_cloudwatch_event_rule.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_rule) | resource |
-| [aws_cloudwatch_event_target.invoke_lambda](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_target) | resource |
-| [aws_cloudwatch_event_target.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_event_target) | resource |
-| [aws_cloudwatch_log_group.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/cloudwatch_log_group) | resource |
-| [aws_ecs_cluster.current](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/ecs_cluster) | resource |
-| [aws_ecs_task_definition.tasks](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/ecs_task_definition) | resource |
-| [aws_iam_role.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
-| [aws_iam_role.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
-| [aws_iam_role.task](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.execution_ecr](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.execution_secrets](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.task_additional_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy_attachment.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.execution](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.task_permissions_arns](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_lambda_permission.allow_eventbridge](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/lambda_permission) | resource |
-| [aws_secretsmanager_secret.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret) | resource |
-| [aws_secretsmanager_secret_version.configuration](https://registry.terraform.io/providers/hashicorp/aws/5.70.0/docs/resources/secretsmanager_secret_version) | resource |
 
 ## Inputs
 
