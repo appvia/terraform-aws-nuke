@@ -1,11 +1,11 @@
 
-## Provision a events IAM role, this is used within the cloudwatch trigger, 
+## Provision a events IAM role, this is used within the cloudwatch trigger,
 ## permitting the event to trigger the ECS task
 
 ## Provision the ECS events IAM role, which is used to trigger the ECS task
 resource "aws_iam_role" "cloudwatch" {
-  name = var.cloudwatch_event_role_name
-  tags = var.tags
+  name_prefix = var.cloudwatch_event_role_name_prefix
+  tags        = var.tags
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -21,13 +21,13 @@ resource "aws_iam_role" "cloudwatch" {
   })
 }
 
-## Attach the ECS events policy to the role 
+## Attach the ECS events policy to the role
 resource "aws_iam_role_policy_attachment" "cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceEventsRole"
   role       = aws_iam_role.cloudwatch.name
 }
 
-## Provision a CloudWatch Log Group for the task to use 
+## Provision a CloudWatch Log Group for the task to use
 # trivy:ignore:AVD-AWS-0017
 resource "aws_cloudwatch_log_group" "tasks" {
   for_each = var.tasks
@@ -38,8 +38,8 @@ resource "aws_cloudwatch_log_group" "tasks" {
   tags              = var.tags
 }
 
-## Provision the cloudwatch event rule to trigger the task - we need to provision  
-## an event rule per task 
+## Provision the cloudwatch event rule to trigger the task - we need to provision
+## an event rule per task
 resource "aws_cloudwatch_event_rule" "tasks" {
   for_each = var.tasks
 
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_event_rule" "tasks" {
   tags                = var.tags
 }
 
-## Provision the cloudwatch event target to run the task 
+## Provision the cloudwatch event target to run the task
 resource "aws_cloudwatch_event_target" "tasks" {
   for_each = var.tasks
 

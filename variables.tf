@@ -21,10 +21,10 @@ variable "ecs_cluster_name" {
   default     = "nuke"
 }
 
-variable "cloudwatch_event_role_name" {
+variable "cloudwatch_event_role_name_prefix" {
   description = "The name of the role to use for the cloudwatch event rule"
   type        = string
-  default     = "nuke-cloudwatch"
+  default     = "nuke-cloudwatch-"
 }
 
 variable "cloudwatch_event_rule_prefix" {
@@ -53,13 +53,13 @@ variable "tasks" {
     schedule                = string
   }))
 
-  ## The tast must have a configuration 
+  ## The tast must have a configuration
   validation {
     condition     = alltrue([for task in keys(var.tasks) : contains(keys(var.tasks[task]), "configuration")])
     error_message = "The task must have a configuration"
   }
 
-  ## The task configuration must not be empty 
+  ## The task configuration must not be empty
   validation {
     condition     = alltrue([for task in keys(var.tasks) : length(var.tasks[task].configuration) > 0])
     error_message = "The task configuration must not be empty"
@@ -71,7 +71,7 @@ variable "tasks" {
     error_message = "The task key must be all lowercase and contain only alphanumeric characters"
   }
 
-  ## The task name cannot be longer than 32 
+  ## The task name cannot be longer than 32
   validation {
     condition     = alltrue([for task in keys(var.tasks) : length(task) <= 32])
     error_message = "The task name cannot be longer than 32 characters"

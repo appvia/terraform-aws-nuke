@@ -1,5 +1,5 @@
 
-## Provision the ECS Cluster used to run the task 
+## Provision the ECS Cluster used to run the task
 # tfsec:ignore:aws-ecs-enable-container-insight
 resource "aws_ecs_cluster" "current" {
   name = var.ecs_cluster_name
@@ -11,13 +11,13 @@ resource "aws_ecs_cluster" "current" {
   }
 }
 
-## Provision the ECS execution IAM role; this is used by the task to execute within 
+## Provision the ECS execution IAM role; this is used by the task to execute within
 ## the ECS cluster
 resource "aws_iam_role" "execution" {
   for_each = var.tasks
 
   description = format("Used by the ECS task to execute within the ECS cluster by the nuke service: '%s'", each.key)
-  name        = format("%s%s", var.iam_execution_role_prefix, each.key)
+  name_prefix = format("%s%s", var.iam_execution_role_prefix, each.key)
   tags        = var.tags
 
   assume_role_policy = jsonencode({
@@ -34,12 +34,12 @@ resource "aws_iam_role" "execution" {
   })
 }
 
-## Provision a role for the task to use, this is used to perform actions and remove 
+## Provision a role for the task to use, this is used to perform actions and remove
 resource "aws_iam_role" "task" {
   for_each = var.tasks
 
   description          = format("Permissions for the ECS nuke task: '%s' to run under", each.key)
-  name                 = format("%s%s", var.iam_task_role_prefix, each.key)
+  name_prefix          = format("%s%s", var.iam_task_role_prefix, each.key)
   permissions_boundary = each.value.permission_boundary_arn
   tags                 = var.tags
 
@@ -57,7 +57,7 @@ resource "aws_iam_role" "task" {
   })
 }
 
-## Attach any managed polices to the task role - i.e the permissions which the task can 
+## Attach any managed polices to the task role - i.e the permissions which the task can
 ## perform within the AWS account/s
 resource "aws_iam_role_policy_attachment" "task_permissions_arns" {
   for_each = local.task_permissions_arns
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy_attachment" "task_permissions_arns" {
   policy_arn = each.value.permission_arn
 }
 
-## Allow any additional permissions to be attached to the task role - these are inline 
+## Allow any additional permissions to be attached to the task role - these are inline
 ## policies applied to the task
 resource "aws_iam_role_policy" "task_additional_permissions" {
   for_each = local.task_additional_permissions
@@ -84,7 +84,7 @@ resource "aws_iam_role_policy_attachment" "execution" {
   role       = aws_iam_role.execution[each.key].name
 }
 
-## Allow the ECS task access to the ECR repository to pull the image 
+## Allow the ECS task access to the ECR repository to pull the image
 resource "aws_iam_role_policy" "execution_ecr" {
   for_each = var.tasks
 
@@ -104,7 +104,7 @@ resource "aws_iam_role_policy" "execution_ecr" {
   })
 }
 
-## Allow the ECS task to retrieve the secret from the secrets manager 
+## Allow the ECS task to retrieve the secret from the secrets manager
 resource "aws_iam_role_policy" "execution_secrets" {
   for_each = var.tasks
 
@@ -126,8 +126,8 @@ resource "aws_iam_role_policy" "execution_secrets" {
   })
 }
 
-## Provision the task definition for the nuke (aws-nuke) to remove all the resources, 
-## Also, we mount the secret from secrets manager to the task 
+## Provision the task definition for the nuke (aws-nuke) to remove all the resources,
+## Also, we mount the secret from secrets manager to the task
 resource "aws_ecs_task_definition" "tasks" {
   for_each = var.tasks
 
