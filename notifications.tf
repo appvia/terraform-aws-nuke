@@ -3,7 +3,7 @@
 module "notification" {
   for_each = local.tasks_with_notifications
   source   = "terraform-aws-modules/lambda/aws"
-  version  = "7.20.0"
+  version  = "7.20.1"
 
   create_package = true
   description    = "Send notifications on the intention to delete resources"
