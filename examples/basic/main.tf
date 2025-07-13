@@ -20,14 +20,12 @@ module "vpc" {
   source  = "appvia/network/aws"
   version = "0.6.10"
 
-  availability_zones     = 2
-  enable_ipam            = false
-  enable_transit_gateway = false
-  name                   = "nuke"
-  public_subnet_netmask  = 28
-  tags                   = local.tags
-  transit_gateway_id     = null
-  vpc_cidr               = "172.16.0.0/25"
+  availability_zones    = 2
+  name                  = "nuke"
+  public_subnet_netmask = 28
+  tags                  = local.tags
+  transit_gateway_id    = null
+  vpc_cidr              = "172.16.0.0/25"
 
 }
 
