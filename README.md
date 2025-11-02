@@ -10,7 +10,7 @@
 
 # Terraform Nuke Module
 
-## Description
+## Introduction
 
 The purpose of this module is to provide a method of automated cleanup of resources, using the [aws-nuke](https://ekristen.github.io/aws-nuke/) tool. This module will create a scheduled task that will run an ECS task on a regular basis to clean up resources that are no longer needed.
 
@@ -91,7 +91,9 @@ module "nuke" {
 }
 ```
 
-Yon can find a full example in the [examples/basic](./examples/basic) directory.
+## Examples
+
+You can find a full example in the [examples/basic](./examples/basic) directory.
 
 ## Configuration Module
 
