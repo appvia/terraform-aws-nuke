@@ -32,11 +32,9 @@ locals {
 
 module "vpc" {
   source  = "appvia/network/aws"
-  version = "0.3.2"
+  version = "0.6.13"
 
   availability_zones     = 2
-  enable_ipam            = false
-  enable_transit_gateway = false
   name                   = "nuke"
   public_subnet_netmask  = 28
   tags                   = local.tags
