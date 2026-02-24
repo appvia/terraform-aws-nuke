@@ -50,3 +50,43 @@ resource "aws_secretsmanager_secret_version" "configuration" {
   secret_id     = aws_secretsmanager_secret.configuration[each.key].id
   secret_string = templatestring(each.value.configuration, local.configuration_data)
 }
+
+## Provision the ECS cluster, if required
+module "ecs_nuke" {
+  count  = var.ecs != null ? 1 : 0
+  source = "./modules/ecs"
+
+  account_id                = var.account_id
+  assign_public_ip          = var.ecs.assign_public_ip
+  container_cpu             = var.ecs.container_cpu
+  container_memory          = var.ecs.container_memory
+  enable_container_insights = var.ecs.enable_container_insights
+  region                    = var.region
+  subnet_ids                = var.ecs.subnet_ids
+  tags                      = var.tags
+  tasks                     = var.tasks
+}
+
+## Provision the Lambda function, if required
+module "lambda_nuke" {
+  count  = var.lambda != null ? 1 : 0
+  source = "./modules/serverless"
+
+  account_id          = var.account_id
+  region              = var.region
+  tasks               = var.tasks
+  tags                = var.tags
+  lambda_name         = var.name
+  lambda_architecture = var.lambda.architecture
+  lambda_memory_size  = var.lambda.memory_size
+  lambda_timeout      = var.lambda.timeout
+  cloudwatch_logs_kms_key_id = module.kms[0].key_id
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
+  cloudwatch_logs_tags = var.tags
+  cloudwatch_logs_kms_key_id = module.kms[0].key_id
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
+  cloudwatch_logs_tags = var.tags
+  cloudwatch_logs_kms_key_id = module.kms[0].key_id
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
+  cloudwatch_logs_tags = var.tags
+}

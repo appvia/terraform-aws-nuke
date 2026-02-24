@@ -15,40 +15,16 @@ variable "create_kms_key" {
   default     = false
 }
 
-variable "name" {
-  description = "The name of the instance (used to prefix the resources)"
+variable "cloudwatch_event_role_name_prefix" {
+  description = "The name of the role to use for the cloudwatch event rule"
   type        = string
-  default     = "lz-nuke"
+  default     = "nuke-cloudwatch-"
 }
 
-variable "ecs" {
-  description = "Indicates if the ECS cluster should be created"
-  type = object({
-    ## The subnet ids to use for the ECS cluster
-    subnet_ids = list(string)
-    ## The amount of memory to allocate to the container
-    container_memory = optional(number, 512)
-    ## The amount of CPU to allocate to the container
-    container_cpu = optional(number, 256)
-    ## Enable container insights
-    enable_container_insights = optional(bool, false)
-    ## Associate a public IP address to the task
-    assign_public_ip = optional(bool, false)
-  })
-  default = null
-}
-
-variable "lambda" {
-  description = "Indicates if the Lambda function should be created"
-  type = object({
-    # The architecture to use for the Lambda function
-    architecture = string
-    # The memory size to use for the Lambda function
-    memory_size = optional(number, 256)
-    # The timeout to use for the Lambda function
-    timeout = optional(number, 900)
-  })
-  default = null
+variable "cloudwatch_event_rule_prefix" {
+  description = "The prefix to use for the cloudwatch event rule"
+  type        = string
+  default     = "lza-nuke"
 }
 
 variable "tasks" {
@@ -108,6 +84,56 @@ variable "kms_administrator_role_name" {
   default     = null
 }
 
+variable "lambda_name" {
+  description = "The name of the lambda function"
+  type        = string
+  default     = "lza-nuke"
+}
+
+variable "lambda_description" {
+  description = "The lambda function description"
+  type        = string
+  default     = "Lambda function to run the AWS Nuke tasks"
+}
+
+variable "lambda_timeout" {
+  description = "The amount of time to allow the lambda function to run before timing out (in seconds)"
+  type        = number
+  default     = 900
+}
+
+variable "lambda_architecture" {
+  description = "The architectures to support for the lambda function"
+  type        = string
+  default     = "arm64"
+}
+
+variable "lambda_memory_size" {
+  description = "The amount of memory to allocate to the lambda function"
+  type        = number
+  default     = 256
+}
+
+variable "cloudwatch" {
+  description = "The cloudwatch configuration"
+  type = object({
+    ## The KMS key id to use for encrypting the log group
+    kms_key_id = optional(string, null)
+    ## The retention period for the log group
+    retention_in_days = optional(number, 7)
+    ## The class of the log group
+    log_group_class = optional(string, "STANDARD")
+  })
+  default = {
+    # The KMS key id to use for encrypting the log group
+    kms_key_id = null
+    # The retention period for the log group
+    retention_in_days = 7
+    # The class of the log group
+    log_group_class = "STANDARD"
+  }
+}
+
 variable "container_image" {
   description = "The image to use for the container"
   type        = string
@@ -118,12 +144,6 @@ variable "container_image_tag" {
   description = "The tag to use for the container image"
   type        = string
   default     = "v3.26.0-2-g672408a-amd64"
-}
-
-variable "log_group_name_prefix" {
-  description = "The name of the log group to create"
-  type        = string
-  default     = "/lza/services/nuke"
 }
 
 variable "log_group_kms_key_id" {

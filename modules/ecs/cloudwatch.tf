@@ -4,7 +4,7 @@
 
 ## Provision the ECS events IAM role, which is used to trigger the ECS task
 resource "aws_iam_role" "cloudwatch" {
-  name_prefix = var.cloudwatch_event_role_name_prefix
+  name_prefix = format("%s-", var.name)
   tags        = var.tags
 
   assume_role_policy = jsonencode({
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_log_group" "tasks" {
   for_each = var.tasks
 
   kms_key_id        = var.log_group_kms_key_id
-  name              = format("%s/%s", var.log_group_name_prefix, each.key)
+  name              = format("/%s/%s", var.log_group_name_prefix, each.key)
   retention_in_days = each.value.retention_in_days
   tags              = var.tags
 }
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_log_group" "tasks" {
 resource "aws_cloudwatch_event_rule" "tasks" {
   for_each = var.tasks
 
-  name                = format("%s-%s", var.cloudwatch_event_rule_prefix, each.key)
+  name                = format("%s-event", var.name)
   description         = each.value.description
   schedule_expression = each.value.schedule
   tags                = var.tags

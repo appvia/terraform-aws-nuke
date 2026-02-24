@@ -9,46 +9,9 @@ variable "region" {
   type        = string
 }
 
-variable "create_kms_key" {
-  description = "Indicates if a KMS key should be created for the log group"
-  type        = bool
-  default     = false
-}
-
 variable "name" {
   description = "The name of the instance (used to prefix the resources)"
   type        = string
-  default     = "lz-nuke"
-}
-
-variable "ecs" {
-  description = "Indicates if the ECS cluster should be created"
-  type = object({
-    ## The subnet ids to use for the ECS cluster
-    subnet_ids = list(string)
-    ## The amount of memory to allocate to the container
-    container_memory = optional(number, 512)
-    ## The amount of CPU to allocate to the container
-    container_cpu = optional(number, 256)
-    ## Enable container insights
-    enable_container_insights = optional(bool, false)
-    ## Associate a public IP address to the task
-    assign_public_ip = optional(bool, false)
-  })
-  default = null
-}
-
-variable "lambda" {
-  description = "Indicates if the Lambda function should be created"
-  type = object({
-    # The architecture to use for the Lambda function
-    architecture = string
-    # The memory size to use for the Lambda function
-    memory_size = optional(number, 256)
-    # The timeout to use for the Lambda function
-    timeout = optional(number, 900)
-  })
-  default = null
 }
 
 variable "tasks" {
@@ -96,50 +59,52 @@ variable "tasks" {
   }
 }
 
-variable "kms_key_alias" {
-  description = "The alias to use for the nuke KMS key"
-  type        = string
-  default     = "nuke"
-}
-
-variable "kms_administrator_role_name" {
-  description = "The name of the role to use as the administrator for the KMS key (defaults to account root)"
-  type        = string
-  default     = null
-}
-
 variable "container_image" {
   description = "The image to use for the container"
   type        = string
-  default     = "ghcr.io/ekristen/aws-nuke"
 }
 
 variable "container_image_tag" {
   description = "The tag to use for the container image"
   type        = string
-  default     = "v3.26.0-2-g672408a-amd64"
+}
+
+variable "container_cpu" {
+  description = "The amount of CPU to allocate to the container"
+  type        = number
+}
+
+variable "container_memory" {
+  description = "The amount of memory to allocate to the container"
+  type        = number
+}
+
+variable "enable_container_insights" {
+  description = "Indicates if container insights should be enabled for the cluster"
+  type        = bool
+}
+
+variable "assign_public_ip" {
+  description = "Indicates if the task should be assigned a public IP"
+  type        = bool
+}
+
+variable "subnet_ids" {
+  description = "The subnet id's to use for the nuke service"
+  type        = list(string)
 }
 
 variable "log_group_name_prefix" {
   description = "The name of the log group to create"
   type        = string
-  default     = "/lza/services/nuke"
 }
 
 variable "log_group_kms_key_id" {
   description = "The KMS key id to use for encrypting the log group"
   type        = string
-  default     = null
-}
-
-variable "configuration_secret_name_prefix" {
-  description = "The prefix to use for AWS Secrets Manager secrets to store the nuke configuration"
-  type        = string
-  default     = "/lza/configuration/nuke"
 }
 
 variable "tags" {
   description = "Map of tags to apply to resources created by this module"
   type        = map(string)
-  default     = {}
 }
