@@ -5,6 +5,17 @@
 *.tfstate
 *.tfstate.*
 
+# Appvia variables files
+appvia.tfvars
+
+# Python related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.pytest_cache/
+
 # terraform lock file
 .terraform.lock.hcl
 

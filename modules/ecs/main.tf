@@ -2,7 +2,7 @@
 ## Provision the ECS Cluster used to run the task
 # tfsec:ignore:aws-ecs-enable-container-insight
 resource "aws_ecs_cluster" "current" {
-  name = var.ecs_cluster_name
+  name = var.name
   tags = var.tags
 
   setting {
@@ -17,7 +17,7 @@ resource "aws_iam_role" "execution" {
   for_each = var.tasks
 
   description = format("Used by the ECS task to execute within the ECS cluster by the nuke service: '%s'", each.key)
-  name_prefix = format("%s%s", var.iam_execution_role_prefix, each.key)
+  name_prefix = format("%s-execution-", var.name)
   tags        = var.tags
 
   assume_role_policy = jsonencode({
@@ -39,7 +39,7 @@ resource "aws_iam_role" "task" {
   for_each = var.tasks
 
   description          = format("Permissions for the ECS nuke task: '%s' to run under", each.key)
-  name_prefix          = format("%s%s", var.iam_task_role_prefix, each.key)
+  name_prefix          = format("%s-", var.name)
   permissions_boundary = each.value.permission_boundary_arn
   tags                 = var.tags
 
@@ -95,8 +95,13 @@ resource "aws_iam_role_policy" "execution_ecr" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid      = "AllowECRPull",
-        Action   = ["ecr:GetAuthorizationToken", "ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"],
+        Sid = "AllowECRPull",
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:GetAuthorizationToken",
+          "ecr:GetDownloadUrlForLayer"
+        ],
         Effect   = "Allow",
         Resource = "*"
       }
@@ -119,7 +124,7 @@ resource "aws_iam_role_policy" "execution_secrets" {
         Action = ["secretsmanager:GetSecretValue"],
         Effect = "Allow",
         Resource = [
-          aws_secretsmanager_secret.configuration[each.key].arn,
+          var.secret_arns[each.key],
         ]
       }
     ]
@@ -171,7 +176,7 @@ resource "aws_ecs_task_definition" "tasks" {
       secrets = [
         {
           name      = "NUKE_CONFIG"
-          valueFrom = aws_secretsmanager_secret_version.configuration[each.key].arn
+          valueFrom = var.secret_arns[each.key]
         }
       ]
 

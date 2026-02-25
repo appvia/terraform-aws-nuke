@@ -1,3 +1,61 @@
+# Configuration Sub-module
+
+## Introduction
+
+This sub-module renders an [aws-nuke](https://ekristen.github.io/aws-nuke/) YAML configuration file from Terraform variables. It provides a structured, repeatable way to generate nuke configurations with sensible defaults -- including built-in filter presets for AWS Control Tower, Landing Zone Accelerator, AWS managed services, and Cost Intelligence Dashboard resources.
+
+The rendered configuration can be passed directly to the root module's `tasks[].configuration` field.
+
+## Features
+
+- **Declarative configuration** -- define target accounts, regions, included/excluded resource types, and filters as Terraform variables.
+- **Built-in filter presets** -- automatically protect Control Tower, Landing Zone Accelerator, AWS managed service, and Cost Intelligence Dashboard resources from deletion.
+- **Customisable resource lists** -- sensible defaults for included and excluded resource types, with `add` and `remove` overrides to tailor without replacing the entire list.
+- **Global filters** -- apply property-based filters (exact, contains, glob, regex, dateOlderThan) across all resource types.
+- **Preset support** -- define named presets with per-resource-type filters for reuse across configurations.
+- **Blocklist** -- prevent accidental nuking of critical accounts by adding them to the blocklist.
+
+## Usage
+
+```hcl
+module "configuration" {
+  source = "github.com/appvia/terraform-aws-nuke//modules/configuration?ref=main"
+
+  accounts = ["123456789012", "123456789013"]
+  regions  = ["us-east-1", "us-west-2"]
+
+  filters = [
+    {
+      property = "tag:Environment"
+      type     = "exact"
+      value    = "Sandbox"
+    }
+  ]
+}
+
+module "nuke" {
+  source = "github.com/appvia/terraform-aws-nuke?ref=main"
+
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  tags       = local.tags
+
+  ecs = {
+    subnet_ids = module.vpc.public_subnet_ids
+  }
+
+  tasks = {
+    "default" = {
+      configuration   = module.configuration.configuration
+      description     = "Weekly nuke run"
+      dry_run         = false
+      schedule        = "cron(0 10 ? * FRI *)"
+      permission_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+    }
+  }
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Providers
 
