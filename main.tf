@@ -1,3 +1,16 @@
+## Craft a policy document for the secrets manager secret to use
+data "aws_iam_policy_document" "secrets_manager_secret" {
+  statement {
+    sid     = "AllowSecretsManagerRead"
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    principals {
+      type        = "AWS"
+      identifiers = [format("arn:aws:iam::%s:root", var.account_id)]
+    }
+    resources = ["*"]
+  }
+}
 
 ## Provision a KMS for the log group to use, if required 
 module "kms" {
@@ -5,7 +18,7 @@ module "kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "4.2.0"
 
-  aliases                 = [var.kms_key_alias]
+  aliases                 = [var.name]
   deletion_window_in_days = 7
   description             = "Used to encrypt the log group for the nuke task"
   enable_key_rotation     = true
@@ -14,7 +27,7 @@ module "kms" {
   key_owners              = [local.kms_key_administrator_arn]
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = false
-  tags                    = merge(var.tags, { "Name" = var.kms_key_alias })
+  tags                    = merge(var.tags, { "Name" = var.name })
 }
 
 ## Place the configuration within the parameter store for the ecs task to access 
@@ -27,20 +40,7 @@ resource "aws_secretsmanager_secret" "configuration" {
   name                    = format("%s/%s", var.configuration_secret_name_prefix, each.key)
   recovery_window_in_days = 0
   tags                    = merge(var.tags, { "Name" = format("%s/%s", var.name, each.key) })
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = "secretsmanager:GetSecretValue",
-        Principal = {
-          AWS = format("arn:aws:iam::%s:root", local.account_id)
-        },
-        Resource = "*"
-      }
-    ]
-  })
+  policy                  = data.aws_iam_policy_document.secrets_manager_secret.json
 }
 
 ## Provision a secret version for the configuration
@@ -56,43 +56,41 @@ module "ecs_nuke" {
   count  = var.ecs != null ? 1 : 0
   source = "./modules/ecs"
 
-  account_id                = var.account_id
-  assign_public_ip          = var.ecs.assign_public_ip
-  container_cpu             = var.ecs.container_cpu
-  container_image           = var.container_image
-  container_image_tag       = var.container_image_tag
-  container_memory          = var.ecs.container_memory
-  enable_container_insights = var.ecs.enable_container_insights
-  log_group_kms_key_id      = try(module.kms[0].key_id, null)
-  log_group_name_prefix     = var.log_group_name_prefix
-  name                      = var.name
-  region                    = var.region
-  secret_arns               = local.secret_arns
-  secret_version_arns       = local.secret_version_arns
-  subnet_ids                = var.ecs.subnet_ids
-  tags                      = var.tags
-  tasks                     = var.tasks
+  account_id                             = var.account_id
+  assign_public_ip                       = var.ecs.assign_public_ip
+  cloudwatch_log_group_class             = var.ecs.cloudwatch_log_group_class
+  cloudwatch_log_group_kms_key_id        = try(module.kms[0].key_id, var.ecs.cloudwatch_log_group_kms_key_id)
+  cloudwatch_log_group_prefix            = var.ecs.cloudwatch_log_group_prefix
+  cloudwatch_log_group_retention_in_days = var.ecs.cloudwatch_log_group_retention_in_days
+  container_cpu                          = var.ecs.container_cpu
+  container_image                        = var.container_image
+  container_image_tag                    = var.container_image_tag
+  container_memory                       = var.ecs.container_memory
+  enable_container_insights              = var.ecs.enable_container_insights
+  name                                   = var.name
+  region                                 = var.region
+  secret_arns                            = local.secret_arns
+  subnet_ids                             = var.ecs.subnet_ids
+  tags                                   = var.tags
+  tasks                                  = var.tasks
 }
 
 ## Provision the Lambda function, if required
 module "lambda_nuke" {
   count  = var.lambda != null ? 1 : 0
-  source = "./modules/serverless"
+  source = "./modules/lambda"
 
-  account_id          = var.account_id
-  container_image     = var.container_image
-  container_image_tag = var.container_image_tag
-  lambda              = var.lambda
-  log_group_name_prefix = var.log_group_name_prefix
-  name                = var.name
-  region              = var.region
-  secret_arns         = local.secret_arns
-  tags                = var.tags
-  tasks               = var.tasks
-
-  cloudwatch = {
-    kms_key_id        = try(module.kms[0].key_id, null)
-    retention_in_days = 7
-    log_group_class   = "STANDARD"
-  }
+  account_id                             = var.account_id
+  cloudwatch_log_group_class             = var.lambda.cloudwatch_log_group_class
+  cloudwatch_log_group_kms_key_id        = try(module.kms[0].key_id, var.lambda.cloudwatch_log_group_kms_key_id)
+  cloudwatch_log_group_retention_in_days = var.lambda.cloudwatch_log_group_retention_in_days
+  container_image                        = var.container_image
+  lambda_architecture                    = var.lambda.architecture
+  lambda_memory_size                     = var.lambda.memory_size
+  lambda_timeout                         = var.lambda.timeout
+  name                                   = var.name
+  region                                 = var.region
+  secret_arns                            = local.secret_arns
+  tags                                   = var.tags
+  tasks                                  = var.tasks
 }

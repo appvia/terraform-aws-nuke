@@ -4,10 +4,8 @@ locals {
   account_id = var.account_id
   ## The region the resources are being provisioned in
   region = var.region
-
   ## A map of tasks with notifications enabled 
   tasks_with_notifications = { for k, v in var.tasks : k => v if try(v.notifications.sns_topic_arn, null) != null }
-
   ## We need to create a map of task->permission_arn for every task 
   task_permissions_all = flatten([
     for k, v in var.tasks : [
@@ -24,7 +22,6 @@ locals {
       permission_arn = v.permission_arn
     }
   }
-
   ## We need to create a map of task->additional_permissions for every task 
   task_additional_permissions_all = flatten([
     for task_name, task_config in var.tasks : [
@@ -35,7 +32,6 @@ locals {
       }
     ]
   ])
-
   ## We need to create a map of task->additional_permissions for every task
   task_additional_permissions = {
     for task, config in local.task_additional_permissions_all : format("%s-%s", config.task, config.permission_name) => {

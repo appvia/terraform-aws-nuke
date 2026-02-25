@@ -4,13 +4,10 @@ locals {
   account_id = var.account_id
   ## The region the resources are being provisioned in
   region = var.region
-
   ## A map of tasks with notifications enabled
   tasks_with_notifications = { for k, v in var.tasks : k => v if try(v.notifications.sns_topic_arn, null) != null }
-
   ## Collect all unique managed policy ARNs from all tasks to attach to the Lambda role
   all_permission_arns = toset(flatten([for k, v in var.tasks : v.permission_arns]))
-
   ## Flatten all additional_permissions from all tasks for inline policy attachment
   task_additional_permissions_all = flatten([
     for task_name, task_config in var.tasks : [

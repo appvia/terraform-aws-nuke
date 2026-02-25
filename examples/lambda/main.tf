@@ -8,30 +8,17 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  ## Tags to apply to the resources
+  # Tags to apply to the resources
   tags = {
     "Environment" = "Sandbox"
     "GitRepo"     = "https://github.com/appvia/terraform-aws-nuke"
     "Owner"       = "Support"
     "Product"     = "Sandbox"
   }
-  ## The account id we are running in
+  # The account id we are running in
   account_id = data.aws_caller_identity.current.account_id
-  ## The region we are running in
+  # The region we are running in
   region = data.aws_region.current.region
-}
-
-module "vpc" {
-  source  = "appvia/network/aws"
-  version = "0.6.13"
-
-  availability_zones    = 2
-  name                  = "nuke"
-  public_subnet_netmask = 28
-  tags                  = local.tags
-  transit_gateway_id    = null
-  vpc_cidr              = "172.16.0.0/25"
-
 }
 
 module "nuke" {
@@ -42,42 +29,24 @@ module "nuke" {
   ## Indicates if the KMS key should be created for the log group
   create_kms_key = false
   ## The name of the instance (used to prefix all resources)
-  name = "nuke-example"
+  name = "nuke-test"
   ## The region to use for the resources
   region = local.region
   ## The tags for the resources created by this module
   tags = local.tags
-
-  ## Configure ECS Fargate as the compute backend.
-  ## Set to null to disable ECS and use Lambda instead (see lambda variable).
-  ecs = {
-    subnet_ids = module.vpc.public_subnet_ids
+  ## Configure Lambda as the compute backend.
+  lambda = {
+    # The architecture to use for the Lambda function
+    architecture = "x86_64"
+    # The memory size to use for the Lambda function
+    memory_size = 256
+    # The timeout to use for the Lambda function
+    timeout = 900
   }
-
-  ## Uncomment to use Lambda as the compute backend instead of ECS.
-  ## Requires a Lambda-compatible container image (see container_image variable).
-  # lambda = {
-  #   architecture = "arm64"
-  # }
-
+  # The container image to use for the Lambda function (OVERRIDDEN BY VARIABLE)
+  container_image = var.container_image
+  # The tasks to run
   tasks = {
-    "default" = {
-      ## The path to the configuration file for the task
-      configuration = templatefile("${path.module}/assets/nuke-config.yml.example", {
-        account_id = local.account_id
-      })
-      ## A description for the task
-      description = "Runs the actual nuke service, deleting resources"
-      ## Indicates if the task should be a dry run (default is true)
-      dry_run = false
-      ## The schedule expression for the task, every friday at 10:00
-      schedule = "cron(0 10 ? * FRI *)"
-      ## The IAM permissions to attach to the task role
-      permission_arns = [
-        "arn:aws:iam::aws:policy/AdministratorAccess"
-      ]
-    }
-
     "dry-run" = {
       ## The path to the configuration file for the task
       configuration = templatefile("${path.module}/assets/nuke-config.yml.example", {

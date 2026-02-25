@@ -4,15 +4,6 @@
 # to build your own root module that invokes this module
 #####################################################################################
 
-locals {
-  tags = {
-    "Environment" = "Sandbox"
-    "GitRepo"     = "https://github.com/appvia/terraform-aws-nuke"
-    "Owner"       = "Support"
-    "Product"     = "Sandbox"
-  }
-}
-
 module "configuration" {
   source = "../.."
 

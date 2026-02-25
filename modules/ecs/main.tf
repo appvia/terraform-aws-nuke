@@ -176,7 +176,7 @@ resource "aws_ecs_task_definition" "tasks" {
       secrets = [
         {
           name      = "NUKE_CONFIG"
-          valueFrom = var.secret_version_arns[each.key]
+          valueFrom = var.secret_arns[each.key]
         }
       ]
 

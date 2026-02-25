@@ -14,6 +14,12 @@
 #
 .PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init examples tests
 
+DOCKER_IMAGE ?= 676206913132.dkr.ecr.eu-west-2.amazonaws.com/lz/services/nuke
+DOCKER_PLATFORM ?= linux/amd64
+NUKE_IMAGE ?= ghcr.io/ekristen/aws-nuke
+NUKE_TAG ?= v3.26.0-2-g672408a-amd64
+AWS_ECR_REGION ?= eu-west-2
+
 default: all
 
 all:
@@ -53,6 +59,26 @@ documentation-examples:
 		echo "--> Generating documentation for example: $$dir"; \
 		terraform-docs $$dir; \
 	done;
+
+docker-ecr-image:
+	@echo "--> Building the Lambda compatible docker image ..."
+	@echo "--> Change the image name by setting the DOCKER_IMAGE environment variable (default: ${DOCKER_IMAGE})"
+	@echo "--> Change the aws-nuke image by setting the NUKE_IMAGE environment variable (default: ${NUKE_IMAGE})"
+	@echo "--> Change the aws-nuke tag by setting the NUKE_TAG environment variable (default: ${NUKE_TAG})"
+	@docker build \
+	--build-arg NUKE_IMAGE=${NUKE_IMAGE} \
+	--build-arg NUKE_TAG=${NUKE_TAG} \
+	--platform ${DOCKER_PLATFORM} \
+	--provenance=false \
+	--sbom=false \
+	-t ${DOCKER_IMAGE}:${NUKE_TAG} \
+	-f assets/docker/Dockerfile assets/docker
+	@echo "--> successfully built the image: ${DOCKER_IMAGE}:${NUKE_TAG}"
+
+docker-ecr-image-push:
+	@$(MAKE) docker-ecr-image
+	@echo "--> Pushing the Lambda compatible docker image"
+	@docker push ${DOCKER_IMAGE}:${NUKE_TAG}
 
 upgrade-terraform-providers:
 	@printf "%s Upgrading Terraform providers for %-24s" "-->" "."
@@ -129,6 +155,10 @@ validate-commits:
 	@echo "--> Running commitlint against the main branch"
 	@command -v commitlint >/dev/null 2>&1 || { echo "commitlint is not installed. Please install it by running 'npm install -g commitlint'"; exit 1; }
 	@git log --pretty=format:"%s" origin/main..HEAD | commitlint --from=origin/main
+
+python-tests:
+	@echo "--> Running Python tests"
+	@python3 -m unittest discover -s assets/docker -p 'test_*.py'
 
 lint:
 	@echo "--> Running tflint"

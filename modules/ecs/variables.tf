@@ -25,9 +25,9 @@ variable "tasks" {
     # The configuration to use for the task
     configuration = string
     # The description to use for the task
-    description   = string
+    description = string
     # Indicates if the task should be a dry run (default is true)
-    dry_run       = optional(bool, true)
+    dry_run = optional(bool, true)
     # The notifications to send for the task
     notifications = optional(object({
       # The SNS topic to send the notification to
@@ -38,12 +38,30 @@ variable "tasks" {
     # The permission boundary to use for the task role
     permission_boundary_arn = optional(string, null)
     # The permission ARNs to attach to the task role
-    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    # The retention in days for the log group
-    retention_in_days       = optional(number, 7)
+    permission_arns = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
     # The schedule to run the task
-    schedule                = string
+    schedule = string
   }))
+}
+
+variable "cloudwatch_log_group_prefix" {
+  description = "The prefix to use for the CloudWatch log group"
+  type        = string
+}
+
+variable "cloudwatch_log_group_retention_in_days" {
+  description = "The retention period for the CloudWatch log group"
+  type        = number
+}
+
+variable "cloudwatch_log_group_class" {
+  description = "The class of the CloudWatch log group"
+  type        = string
+}
+
+variable "cloudwatch_log_group_kms_key_id" {
+  description = "The KMS key id to use for encrypting the log group"
+  type        = string
 }
 
 variable "container_image" {
@@ -81,27 +99,13 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "log_group_name_prefix" {
-  description = "The name of the log group to create"
-  type        = string
-}
-
-variable "log_group_kms_key_id" {
-  description = "The KMS key id to use for encrypting the log group"
-  type        = string
-}
-
 variable "secret_arns" {
   description = "A map of task name to the ARN of the SecretsManager secret holding the nuke configuration"
-  type        = map(string)
-}
-
-variable "secret_version_arns" {
-  description = "A map of task name to the ARN of the SecretsManager secret version holding the nuke configuration"
   type        = map(string)
 }
 
 variable "tags" {
   description = "Map of tags to apply to resources created by this module"
   type        = map(string)
+  default     = {}
 }

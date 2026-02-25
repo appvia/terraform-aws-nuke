@@ -7,6 +7,13 @@ data "aws_iam_policy_document" "secrets_access" {
     actions   = ["secretsmanager:GetSecretValue"]
     resources = values(var.secret_arns)
   }
+
+  statement {
+    sid       = "AllowECRPull"
+    effect    = "Allow"
+    actions   = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"]
+    resources = ["*"]
+  }
 }
 
 ## Lambda function that runs aws-nuke via a Lambda-compatible container image.
@@ -15,15 +22,15 @@ module "lambda_function" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.5.0"
 
-  architectures  = [var.lambda.architecture]
+  architectures  = [var.lambda_architecture]
   create_package = false
-  description    = format("Runs aws-nuke for instance: %s", var.name)
+  description    = format("Runs the AWS Nuke within the account, for the %q task", var.name)
   function_name  = var.name
-  memory_size    = var.lambda.memory_size
+  memory_size    = var.lambda_memory_size
   package_type   = "Image"
   tags           = merge(var.tags, { "Name" = var.name })
-  timeout        = var.lambda.timeout
-  image_uri      = format("%s:%s", var.container_image, var.container_image_tag)
+  timeout        = var.lambda_timeout
+  image_uri      = var.container_image
 
   ## Lambda Role
   create_role                   = true
@@ -47,9 +54,9 @@ module "lambda_function" {
 
   ## CloudWatch Logs
   cloudwatch_logs_tags              = var.tags
-  cloudwatch_logs_kms_key_id        = var.cloudwatch.kms_key_id
-  cloudwatch_logs_retention_in_days = var.cloudwatch.retention_in_days
-  cloudwatch_logs_log_group_class   = var.cloudwatch.log_group_class
+  cloudwatch_logs_kms_key_id        = var.cloudwatch_log_group_kms_key_id
+  cloudwatch_logs_retention_in_days = var.cloudwatch_log_group_retention_in_days
+  cloudwatch_logs_log_group_class   = var.cloudwatch_log_group_class
 }
 
 ## Attach any additional inline policies from tasks to the Lambda execution role
@@ -61,7 +68,7 @@ resource "aws_iam_role_policy" "additional_permissions" {
   policy = each.value
 }
 
-## Provision one EventBridge rule per task, each with its own schedule
+## Provision the event bridge rule to trigger the Lambda function
 resource "aws_cloudwatch_event_rule" "tasks" {
   for_each = var.tasks
 
@@ -81,15 +88,15 @@ resource "aws_cloudwatch_event_target" "tasks" {
   target_id = format("%s-%s", var.name, each.key)
 
   input = jsonencode({
-    task_name     = each.key
     dry_run       = each.value.dry_run
     secret_arn    = var.secret_arns[each.key]
     sns_topic_arn = try(each.value.notifications.sns_topic_arn, null)
+    task_name     = each.key
   })
 }
 
-## Allow each task's EventBridge rule to invoke the shared Lambda function
-resource "aws_lambda_permission" "allow_eventbridge" {
+## Allow the EventBridge rule to invoke the Lambda function
+resource "aws_lambda_permission" "allow_event_bridge" {
   for_each = var.tasks
 
   action        = "lambda:InvokeFunction"
@@ -97,38 +104,6 @@ resource "aws_lambda_permission" "allow_eventbridge" {
   principal     = "events.amazonaws.com"
   statement_id  = format("AllowEventBridge-%s", each.key)
   source_arn    = aws_cloudwatch_event_rule.tasks[each.key].arn
-}
-
-## CloudWatch Log Group for per-task nuke logs (written to by the Lambda handler)
-# trivy:ignore:AVD-AWS-0017
-resource "aws_cloudwatch_log_group" "tasks" {
-  for_each = var.tasks
-
-  kms_key_id        = var.cloudwatch.kms_key_id
-  name              = format("%s/%s", var.log_group_name_prefix, each.key)
-  retention_in_days = each.value.retention_in_days
-  tags              = var.tags
-}
-
-## Allow the Lambda function to write logs to the per-task log groups
-resource "aws_iam_role_policy" "task_log_write" {
-  name = "allow-task-log-write"
-  role = module.lambda_function.lambda_role_name
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid    = "AllowCloudWatchLogsWrite",
-        Effect = "Allow",
-        Action = [
-          "logs:CreateLogStream",
-          "logs:PutLogEvents",
-        ],
-        Resource = [for k, v in aws_cloudwatch_log_group.tasks : format("%s:*", v.arn)]
-      }
-    ]
-  })
 }
 
 ## Allow the Lambda to publish SNS notifications for tasks that have notifications configured

@@ -28,7 +28,7 @@ module "notification" {
     }
     "filters" = {
       actions   = ["logs:FilterLogEvents"]
-      resources = [format("arn:aws:logs:%s:%s:log-group:%s/%s:*", var.region, var.account_id, var.log_group_name_prefix, each.key)]
+      resources = [format("arn:aws:logs:%s:%s:log-group:%s/%s:*", var.region, var.account_id, var.cloudwatch_log_group_prefix, each.key)]
       effect    = "Allow"
     }
   }
@@ -40,9 +40,9 @@ module "notification" {
   cloudwatch_logs_retention_in_days = 5
   cloudwatch_logs_skip_destroy      = false
 
-  ## Envionment variables for the Lambda function
+  ## Environment variables for the Lambda function
   environment_variables = {
-    "LOG_GROUP_NAME" = format("%s/%s", var.log_group_name_prefix, each.key)
+    "LOG_GROUP_NAME" = format("%s/%s", var.cloudwatch_log_group_prefix, each.key)
     "SNS_TOPIC_ARN"  = each.value.notifications.sns_topic_arn
   }
 }

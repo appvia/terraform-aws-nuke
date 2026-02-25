@@ -32,9 +32,9 @@ resource "aws_iam_role_policy_attachment" "cloudwatch" {
 resource "aws_cloudwatch_log_group" "tasks" {
   for_each = var.tasks
 
-  kms_key_id        = var.log_group_kms_key_id
-  name              = format("%s/%s", var.log_group_name_prefix, each.key)
-  retention_in_days = each.value.retention_in_days
+  kms_key_id        = var.cloudwatch_log_group_kms_key_id
+  name              = format("%s/%s", var.cloudwatch_log_group_prefix, each.key)
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
   tags              = var.tags
 }
 

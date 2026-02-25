@@ -28,3 +28,8 @@ output "lambda_function_name" {
   description = "The name of the Lambda function running nuke tasks, if serverless mode is enabled"
   value       = var.lambda != null ? module.lambda_nuke[0].lambda_function_name : null
 }
+
+output "secret_arns" {
+  description = "A map of task name to the ARN of the SecretsManager secret holding the nuke configuration"
+  value       = local.secret_arns
+}

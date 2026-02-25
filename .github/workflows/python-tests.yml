@@ -1,0 +1,35 @@
+---
+name: Python Tests
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - assets/docker/handler.py
+      - assets/docker/test_handler.py
+  pull_request:
+    branches:
+      - main
+    paths:
+      - assets/docker/handler.py
+      - assets/docker/test_handler.py
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run Tests
+        working-directory: assets/docker
+        run: python -m pytest test_handler.py -v
