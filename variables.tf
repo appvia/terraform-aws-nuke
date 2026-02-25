@@ -146,7 +146,7 @@ variable "log_group_kms_key_id" {
 variable "configuration_secret_name_prefix" {
   description = "The prefix to use for AWS Secrets Manager secrets to store the nuke configuration"
   type        = string
-  default     = "/lza/configuration/nuke"
+  default     = "/lz/services/nuke"
 }
 
 variable "tags" {
