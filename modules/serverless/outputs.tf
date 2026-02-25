@@ -1,10 +1,15 @@
 
-output "kms_key_id" {
-  description = "The KMS key ID used for the nuke service, if created"
-  value       = var.create_kms_key ? module.kms[0].key_id : null
+output "lambda_function_arn" {
+  description = "The ARN of the Lambda function running aws-nuke"
+  value       = module.lambda_function.lambda_function_arn
 }
 
-output "kms_key_arn" {
-  description = "The KMS key ARN used for the nuke service, if created"
-  value       = var.create_kms_key ? module.kms[0].key_arn : null
+output "lambda_function_name" {
+  description = "The name of the Lambda function running aws-nuke"
+  value       = module.lambda_function.lambda_function_name
+}
+
+output "lambda_role_arn" {
+  description = "The ARN of the IAM role used by the Lambda function"
+  value       = module.lambda_function.lambda_role_arn
 }

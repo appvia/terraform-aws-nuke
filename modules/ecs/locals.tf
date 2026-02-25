@@ -4,11 +4,6 @@ locals {
   account_id = var.account_id
   ## The region the resources are being provisioned in
   region = var.region
-  ## The configuration values passed to the rendered template 
-  configuration_data = {
-    account_id = local.account_id
-    region     = local.region
-  }
 
   ## A map of tasks with notifications enabled 
   tasks_with_notifications = { for k, v in var.tasks : k => v if try(v.notifications.sns_topic_arn, null) != null }

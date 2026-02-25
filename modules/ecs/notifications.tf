@@ -7,11 +7,11 @@ module "notification" {
 
   create_package = true
   description    = "Send notifications on the intention to delete resources"
-  function_name  = format("lza-nuke-notification-%s", lower(each.key))
+  function_name  = format("%s-notification-%s", var.name, lower(each.key))
   handler        = "lambda_function.lambda_handler"
   memory_size    = "128"
   runtime        = "python3.9"
-  source_path    = format("%s/assets/lambda/notification.py", path.module)
+  source_path    = format("%s/assets/lambda/notification.py", path.root)
   tags           = var.tags
   timeout        = 10
 
@@ -35,7 +35,7 @@ module "notification" {
 
   ## We are using the log group created above to ensure we control the 
   ## configuration and the retention period of the logs
-  logging_log_group                 = format("/aws/lambda/%s", format("lza-nuke-notification-%s", lower(each.key)))
+  logging_log_group                 = format("/aws/lambda/%s-notification-%s", var.name, lower(each.key))
   cloudwatch_logs_log_group_class   = "STANDARD"
   cloudwatch_logs_retention_in_days = 5
   cloudwatch_logs_skip_destroy      = false
@@ -51,7 +51,7 @@ module "notification" {
 resource "aws_cloudwatch_event_rule" "ecs_task_stopped_rule" {
   for_each = local.tasks_with_notifications
 
-  name          = "lza-nuke-notification-${lower(each.key)}"
+  name          = format("%s-notification-%s", var.name, lower(each.key))
   description   = "Trigger Lambda when an ECS task in the specified cluster stops."
   force_destroy = true
   tags          = var.tags

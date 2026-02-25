@@ -17,46 +17,33 @@ variable "name" {
 variable "tasks" {
   description = "A collection of nuke tasks to run and when to run them"
   type = map(object({
+    # Additional permissions to attach to the task role
     additional_permissions = optional(map(object({
+      # The policy to attach to the task role
       policy = string
     })), {})
+    # The configuration to use for the task
     configuration = string
+    # The description to use for the task
     description   = string
+    # Indicates if the task should be a dry run (default is true)
     dry_run       = optional(bool, true)
+    # The notifications to send for the task
     notifications = optional(object({
+      # The SNS topic to send the notification to
       sns_topic_arn = optional(string, null)
       }), {
       sns_topic_arn = null
     })
+    # The permission boundary to use for the task role
     permission_boundary_arn = optional(string, null)
+    # The permission ARNs to attach to the task role
     permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    # The retention in days for the log group
     retention_in_days       = optional(number, 7)
+    # The schedule to run the task
     schedule                = string
   }))
-
-  ## The tast must have a configuration
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : contains(keys(var.tasks[task]), "configuration")])
-    error_message = "The task must have a configuration"
-  }
-
-  ## The task configuration must not be empty
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : length(var.tasks[task].configuration) > 0])
-    error_message = "The task configuration must not be empty"
-  }
-
-  ## The task key must be all lowercase and contain only alpha characters
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : can(regex("^[a-z\\_\\-]+$", task))])
-    error_message = "The task key must be all lowercase and contain only alphanumeric characters"
-  }
-
-  ## The task name cannot be longer than 32
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : length(task) <= 32])
-    error_message = "The task name cannot be longer than 32 characters"
-  }
 }
 
 variable "container_image" {
@@ -102,6 +89,16 @@ variable "log_group_name_prefix" {
 variable "log_group_kms_key_id" {
   description = "The KMS key id to use for encrypting the log group"
   type        = string
+}
+
+variable "secret_arns" {
+  description = "A map of task name to the ARN of the SecretsManager secret holding the nuke configuration"
+  type        = map(string)
+}
+
+variable "secret_version_arns" {
+  description = "A map of task name to the ARN of the SecretsManager secret version holding the nuke configuration"
+  type        = map(string)
 }
 
 variable "tags" {

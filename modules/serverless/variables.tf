@@ -9,153 +9,91 @@ variable "region" {
   type        = string
 }
 
-variable "create_kms_key" {
-  description = "Indicates if a KMS key should be created for the log group"
-  type        = bool
-  default     = false
-}
-
-variable "cloudwatch_event_role_name_prefix" {
-  description = "The name of the role to use for the cloudwatch event rule"
+variable "name" {
+  description = "The name of the instance (used to prefix the resources)"
   type        = string
-  default     = "nuke-cloudwatch-"
-}
-
-variable "cloudwatch_event_rule_prefix" {
-  description = "The prefix to use for the cloudwatch event rule"
-  type        = string
-  default     = "lza-nuke"
 }
 
 variable "tasks" {
   description = "A collection of nuke tasks to run and when to run them"
   type = map(object({
+    # Additional permissions to attach to the task role
     additional_permissions = optional(map(object({
+      # The policy to attach to the task role
       policy = string
     })), {})
+    # The configuration to use for the task
     configuration = string
-    description   = string
-    dry_run       = optional(bool, true)
+    # The description to use for the task
+    description = string
+    # Indicates if the task should be a dry run (default is true)
+    dry_run = optional(bool, true)
+    # The notifications to send for the task
     notifications = optional(object({
+      # The SNS topic to send the notification to
       sns_topic_arn = optional(string, null)
       }), {
       sns_topic_arn = null
     })
+    # The permission boundary to use for the task role
     permission_boundary_arn = optional(string, null)
-    permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
-    retention_in_days       = optional(number, 7)
-    schedule                = string
-  }))
-
-  ## The tast must have a configuration
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : contains(keys(var.tasks[task]), "configuration")])
-    error_message = "The task must have a configuration"
-  }
-
-  ## The task configuration must not be empty
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : length(var.tasks[task].configuration) > 0])
-    error_message = "The task configuration must not be empty"
-  }
-
-  ## The task key must be all lowercase and contain only alpha characters
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : can(regex("^[a-z\\_\\-]+$", task))])
-    error_message = "The task key must be all lowercase and contain only alphanumeric characters"
-  }
-
-  ## The task name cannot be longer than 32
-  validation {
-    condition     = alltrue([for task in keys(var.tasks) : length(task) <= 32])
-    error_message = "The task name cannot be longer than 32 characters"
-  }
-}
-
-variable "kms_key_alias" {
-  description = "The alias to use for the nuke KMS key"
-  type        = string
-  default     = "nuke"
-}
-
-variable "kms_administrator_role_name" {
-  description = "The name of the role to use as the administrator for the KMS key (defaults to account root)"
-  type        = string
-  default     = null
-}
-
-variable "lambda_name" {
-  description = "The name of the lambda function"
-  type        = string
-  default     = "lza-nuke"
-}
-
-variable "lambda_description" {
-  description = "The lambda function description"
-  type        = string
-  default     = "Lambda function to run the AWS Nuke tasks"
-}
-
-variable "lambda_timeout" {
-  description = "The amount of time to allow the lambda function to run before timing out (in seconds)"
-  type        = number
-  default     = 900
-}
-
-variable "lambda_architecture" {
-  description = "The architectures to support for the lambda function"
-  type        = string
-  default     = "arm64"
-}
-
-variable "lambda_memory_size" {
-  description = "The amount of memory to allocate to the lambda function"
-  type        = number
-  default     = 256
-}
-
-variable "cloudwatch" {
-  description = "The cloudwatch configuration"
-  type = object({
-    ## The KMS key id to use for encrypting the log group
-    kms_key_id = optional(string, null)
-    ## The retention period for the log group
+    # The permission ARNs to attach to the task role
+    permission_arns = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    # The retention in days for the log group
     retention_in_days = optional(number, 7)
-    ## The class of the log group
-    log_group_class = optional(string, "STANDARD")
-  })
-  default = {
-    # The KMS key id to use for encrypting the log group
-    kms_key_id = null
-    # The retention period for the log group
-    retention_in_days = 7
-    # The class of the log group
-    log_group_class = "STANDARD"
-  }
+    # The schedule to run the task
+    schedule = string
+  }))
+}
+
+variable "secret_arns" {
+  description = "A map of task name to the ARN of the SecretsManager secret holding the nuke configuration"
+  type        = map(string)
 }
 
 variable "container_image" {
-  description = "The image to use for the container"
+  description = "The Lambda-compatible container image URI to use for the nuke function"
   type        = string
-  default     = "ghcr.io/ekristen/aws-nuke"
 }
 
 variable "container_image_tag" {
   description = "The tag to use for the container image"
   type        = string
-  default     = "v3.26.0-2-g672408a-amd64"
 }
 
-variable "log_group_kms_key_id" {
-  description = "The KMS key id to use for encrypting the log group"
-  type        = string
-  default     = null
+variable "lambda" {
+  description = "Lambda function configuration"
+  type = object({
+    # The architecture to use for the Lambda function (x86_64 or arm64)
+    architecture = string
+    # The memory size to use for the Lambda function (in MB)
+    memory_size = optional(number, 256)
+    # The timeout to use for the Lambda function (in seconds, max 900)
+    timeout = optional(number, 900)
+  })
 }
 
-variable "configuration_secret_name_prefix" {
-  description = "The prefix to use for AWS Secrets Manager secrets to store the nuke configuration"
+variable "log_group_name_prefix" {
+  description = "The prefix to use for CloudWatch log group names"
   type        = string
-  default     = "/lza/configuration/nuke"
+  default     = "/lza/services/nuke"
+}
+
+variable "cloudwatch" {
+  description = "CloudWatch log group configuration for the Lambda function"
+  type = object({
+    # The KMS key id to use for encrypting the log group
+    kms_key_id = optional(string, null)
+    # The retention period for the log group (in days)
+    retention_in_days = optional(number, 7)
+    # The class of the log group
+    log_group_class = optional(string, "STANDARD")
+  })
+  default = {
+    kms_key_id        = null
+    retention_in_days = 7
+    log_group_class   = "STANDARD"
+  }
 }
 
 variable "tags" {

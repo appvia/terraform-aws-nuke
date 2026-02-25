@@ -13,5 +13,10 @@ locals {
     account_id = local.account_id
     region     = local.region
   }
+
+  ## Collection of secret arns for the tasks
+  secret_arns = { for k, v in aws_secretsmanager_secret.configuration : k => v.arn }
+  ## Collection of secret version arns for the tasks
+  secret_version_arns = { for k, v in aws_secretsmanager_secret_version.configuration : k => v.arn }
 }
 

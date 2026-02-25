@@ -59,9 +59,16 @@ module "ecs_nuke" {
   account_id                = var.account_id
   assign_public_ip          = var.ecs.assign_public_ip
   container_cpu             = var.ecs.container_cpu
+  container_image           = var.container_image
+  container_image_tag       = var.container_image_tag
   container_memory          = var.ecs.container_memory
   enable_container_insights = var.ecs.enable_container_insights
+  log_group_kms_key_id      = try(module.kms[0].key_id, null)
+  log_group_name_prefix     = var.log_group_name_prefix
+  name                      = var.name
   region                    = var.region
+  secret_arns               = local.secret_arns
+  secret_version_arns       = local.secret_version_arns
   subnet_ids                = var.ecs.subnet_ids
   tags                      = var.tags
   tasks                     = var.tasks
@@ -73,20 +80,19 @@ module "lambda_nuke" {
   source = "./modules/serverless"
 
   account_id          = var.account_id
+  container_image     = var.container_image
+  container_image_tag = var.container_image_tag
+  lambda              = var.lambda
+  log_group_name_prefix = var.log_group_name_prefix
+  name                = var.name
   region              = var.region
-  tasks               = var.tasks
+  secret_arns         = local.secret_arns
   tags                = var.tags
-  lambda_name         = var.name
-  lambda_architecture = var.lambda.architecture
-  lambda_memory_size  = var.lambda.memory_size
-  lambda_timeout      = var.lambda.timeout
-  cloudwatch_logs_kms_key_id = module.kms[0].key_id
-  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
-  cloudwatch_logs_tags = var.tags
-  cloudwatch_logs_kms_key_id = module.kms[0].key_id
-  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
-  cloudwatch_logs_tags = var.tags
-  cloudwatch_logs_kms_key_id = module.kms[0].key_id
-  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
-  cloudwatch_logs_tags = var.tags
+  tasks               = var.tasks
+
+  cloudwatch = {
+    kms_key_id        = try(module.kms[0].key_id, null)
+    retention_in_days = 7
+    log_group_class   = "STANDARD"
+  }
 }

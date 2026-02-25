@@ -54,24 +54,35 @@ variable "lambda" {
 variable "tasks" {
   description = "A collection of nuke tasks to run and when to run them"
   type = map(object({
+    # Additional permissions to attach to the task role
     additional_permissions = optional(map(object({
+      # The policy to attach to the task role
       policy = string
     })), {})
+    # The configuration to use for the task
     configuration = string
+    # The description to use for the task
     description   = string
+    # Indicates if the task should be a dry run (default is true)
     dry_run       = optional(bool, true)
+    # The notifications to send for the task
     notifications = optional(object({
+      # The SNS topic to send the notification to
       sns_topic_arn = optional(string, null)
       }), {
       sns_topic_arn = null
     })
+    # The permission boundary to use for the task role
     permission_boundary_arn = optional(string, null)
+    # The permission ARNs to attach to the task role
     permission_arns         = optional(list(string), ["arn:aws:iam::aws:policy/AdministratorAccess"])
+    # The retention in days for the log group
     retention_in_days       = optional(number, 7)
+    # The schedule to run the task
     schedule                = string
   }))
 
-  ## The tast must have a configuration
+  ## The task must have a configuration
   validation {
     condition     = alltrue([for task in keys(var.tasks) : contains(keys(var.tasks[task]), "configuration")])
     error_message = "The task must have a configuration"

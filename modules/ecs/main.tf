@@ -124,7 +124,7 @@ resource "aws_iam_role_policy" "execution_secrets" {
         Action = ["secretsmanager:GetSecretValue"],
         Effect = "Allow",
         Resource = [
-          aws_secretsmanager_secret.configuration[each.key].arn,
+          var.secret_arns[each.key],
         ]
       }
     ]
@@ -176,7 +176,7 @@ resource "aws_ecs_task_definition" "tasks" {
       secrets = [
         {
           name      = "NUKE_CONFIG"
-          valueFrom = aws_secretsmanager_secret_version.configuration[each.key].arn
+          valueFrom = var.secret_version_arns[each.key]
         }
       ]
 

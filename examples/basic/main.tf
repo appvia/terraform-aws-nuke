@@ -29,14 +29,6 @@ module "vpc" {
 
 }
 
-data "aws_iam_policy_document" "additional" {
-  statement {
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["*"]
-    effect    = "Allow"
-  }
-}
-
 module "nuke" {
   source = "../../"
 
@@ -44,14 +36,24 @@ module "nuke" {
   account_id = data.aws_caller_identity.current.account_id
   ## Indicates if the KMS key should be created for the log group
   create_kms_key = false
+  ## The name of the instance (used to prefix all resources)
+  name = "nuke-example"
   ## The region to use for the resources
   region = data.aws_region.current.name
-  ## The ssubnet_ids to use for the nuke service
-  subnet_ids = module.vpc.public_subnet_ids
   ## The tags for the resources created by this module
   tags = local.tags
-  ## name is the service name
-  ecs_cluster_name = "nuke-example"
+
+  ## Configure ECS Fargate as the compute backend.
+  ## Set to null to disable ECS and use Lambda instead (see lambda variable).
+  ecs = {
+    subnet_ids = module.vpc.public_subnet_ids
+  }
+
+  ## Uncomment to use Lambda as the compute backend instead of ECS.
+  ## Requires a Lambda-compatible container image (see container_image variable).
+  # lambda = {
+  #   architecture = "arm64"
+  # }
 
   tasks = {
     "default" = {
@@ -69,12 +71,6 @@ module "nuke" {
       permission_arns = [
         "arn:aws:iam::aws:policy/AdministratorAccess"
       ]
-      ## Additional inline permissions
-      additional_permissions = {
-        "secrets" = {
-          policy = data.aws_iam_policy_document.additional.json
-        }
-      }
     }
 
     "dry-run" = {
@@ -97,12 +93,6 @@ module "nuke" {
       permission_arns = [
         "arn:aws:iam::aws:policy/ReadOnlyAccess"
       ]
-      ## Additional inline permissions
-      additional_permissions = {
-        "secrets" = {
-          policy = data.aws_iam_policy_document.additional.json
-        }
-      }
     }
   }
 }
