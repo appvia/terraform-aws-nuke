@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "secrets_access" {
 ## A single function handles all tasks; per-task config is injected via EventBridge input.
 module "lambda_function" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.5.0"
+  version = "8.7.0"
 
   architectures  = [var.lambda_architecture]
   create_package = false
