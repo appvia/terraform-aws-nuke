@@ -290,4 +290,5 @@ The `terraform-docs` utility is used to generate this README. Follow the below s
 | <a name="output_kms_key_id"></a> [kms\_key\_id](#output\_kms\_key\_id) | The KMS key ID used for the nuke service, if created |
 | <a name="output_lambda_function_arn"></a> [lambda\_function\_arn](#output\_lambda\_function\_arn) | The ARN of the Lambda function running nuke tasks, if serverless mode is enabled |
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | The name of the Lambda function running nuke tasks, if serverless mode is enabled |
+| <a name="output_secret_arns"></a> [secret\_arns](#output\_secret\_arns) | A map of task name to the ARN of the SecretsManager secret holding the nuke configuration |
 <!-- END_TF_DOCS -->

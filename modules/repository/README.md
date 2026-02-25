@@ -50,6 +50,9 @@ module "nuke_ecr" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_account_ids"></a> [account\_ids](#input\_account\_ids) | The account ids to allow access to the repository | `list(string)` | `[]` | no |
+| <a name="input_enable_scan_on_push"></a> [enable\_scan\_on\_push](#input\_enable\_scan\_on\_push) | Indicates if the repository should enable image scanning on push | `bool` | `true` | no |
+| <a name="input_immutable_exclusions"></a> [immutable\_exclusions](#input\_immutable\_exclusions) | A collection of immutable exclusions to apply to the repository | <pre>list(object({<br/>    ## The filter to apply to the exclusion<br/>    filter = string<br/>    ## The type of filter to apply to the exclusion<br/>    filter_type = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The KMS key ID to use for the repository | `string` | `null` | no |
 | <a name="input_organization_id"></a> [organization\_id](#input\_organization\_id) | AWS Organization ID used to pull the nuke container image from the AWS ECR Public Gallery | `string` | `null` | no |
 | <a name="input_repository_name"></a> [repository\_name](#input\_repository\_name) | The name of the repository to use for the nuke container | `string` | `"lz/operations/aws-nuke"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Map of tags to apply to resources created by this module | `map(string)` | `{}` | no |

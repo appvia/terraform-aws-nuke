@@ -30,6 +30,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install Dependencies
+        run: pip3 install pytest
+
       - name: Run Tests
         working-directory: assets/docker
-        run: python -m pytest test_handler.py -v
+        run: python3 -m pytest test_handler.py -v
