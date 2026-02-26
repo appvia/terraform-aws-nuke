@@ -14,11 +14,11 @@
 #
 .PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init examples tests
 
-DOCKER_IMAGE ?= 676206913132.dkr.ecr.eu-west-2.amazonaws.com/lz/services/nuke
+AWS_ECR_REGION ?= eu-west-2
+DOCKER_IMAGE ?= 676206913132.dkr.ecr.${AWS_ECR_REGION}.amazonaws.com/lz/services/nuke
 DOCKER_PLATFORM ?= linux/amd64
 NUKE_IMAGE ?= ghcr.io/ekristen/aws-nuke
-NUKE_TAG ?= v3.26.0-2-g672408a-amd64
-AWS_ECR_REGION ?= eu-west-2
+NUKE_TAG ?= v3.63.4-10-g985b49c-amd64
 
 default: all
 
@@ -65,6 +65,7 @@ docker-ecr-image:
 	@echo "--> Change the image name by setting the DOCKER_IMAGE environment variable (default: ${DOCKER_IMAGE})"
 	@echo "--> Change the aws-nuke image by setting the NUKE_IMAGE environment variable (default: ${NUKE_IMAGE})"
 	@echo "--> Change the aws-nuke tag by setting the NUKE_TAG environment variable (default: ${NUKE_TAG})"
+	@echo "--> Change the AWS region by setting the AWS_ECR_REGION environment variable (default: ${AWS_ECR_REGION})"
 	@docker build \
 	--build-arg NUKE_IMAGE=${NUKE_IMAGE} \
 	--build-arg NUKE_TAG=${NUKE_TAG} \
