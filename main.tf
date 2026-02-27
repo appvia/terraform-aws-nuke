@@ -34,7 +34,7 @@ resource "aws_secretsmanager_secret_policy" "configuration" {
 
   secret_arn = aws_secretsmanager_secret.configuration[each.key].arn
 
-  policy = jsondecode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
