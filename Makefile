@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-.PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init examples tests
+.PHONY: all security lint format documentation documentation-examples validate-all validate validate-examples init examples tests python-test python-tests
 
 AWS_ECR_REGION ?= eu-west-2
 DOCKER_IMAGE ?= 676206913132.dkr.ecr.${AWS_ECR_REGION}.amazonaws.com/lz/services/nuke
@@ -160,6 +160,8 @@ validate-commits:
 python-tests:
 	@echo "--> Running Python tests"
 	@python3 -m unittest discover -s assets/docker -p 'test_*.py'
+
+python-test: python-tests
 
 lint:
 	@echo "--> Running tflint"

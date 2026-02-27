@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "secrets_access" {
     sid       = "AllowSecretsManagerRead"
     effect    = "Allow"
     actions   = ["secretsmanager:GetSecretValue"]
-    resources = values(var.secret_arns)
+    resources = [format("arn:aws:secretsmanager:%s:%s:secret:%s/*", var.region, var.account_id, var.configuration_secret_name_prefix)]
   }
 
   statement {
@@ -79,7 +79,7 @@ resource "aws_cloudwatch_event_rule" "tasks" {
 }
 
 ## Provision one EventBridge target per task, passing task config as static JSON input.
-## The Lambda handler receives: task_name, dry_run, secret_arn, and optionally sns_topic_arn.
+## The Lambda handler receives: task_name, dry_run, secret_name, and optionally sns_topic_arn.
 resource "aws_cloudwatch_event_target" "tasks" {
   for_each = var.tasks
 
@@ -89,7 +89,7 @@ resource "aws_cloudwatch_event_target" "tasks" {
 
   input = jsonencode({
     dry_run       = each.value.dry_run
-    secret_arn    = var.secret_arns[each.key]
+    secret_name   = format("%s/%s", var.configuration_secret_name_prefix, each.key)
     sns_topic_arn = try(each.value.notifications.sns_topic_arn, null)
     task_name     = each.key
   })

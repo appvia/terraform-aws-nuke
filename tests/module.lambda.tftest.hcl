@@ -54,13 +54,10 @@ run "lambda_single_task" {
     cloudwatch_log_group_kms_key_id        = null
     cloudwatch_log_group_retention_in_days = 7
     container_image                        = "123456789012.dkr.ecr.eu-west-1.amazonaws.com/lz/operations/aws-nuke:latest"
+    configuration_secret_name_prefix       = "/lz/services/nuke"
     lambda_architecture                    = "arm64"
     lambda_memory_size                     = 256
     lambda_timeout                         = 900
-
-    secret_arns = {
-      "sandbox" = "arn:aws:secretsmanager:eu-west-1:123456789012:secret:nuke/sandbox-abc"
-    }
 
     tasks = {
       "sandbox" = {
@@ -96,14 +93,10 @@ run "lambda_multi_task" {
     cloudwatch_log_group_kms_key_id        = null
     cloudwatch_log_group_retention_in_days = 7
     container_image                        = "123456789012.dkr.ecr.eu-west-1.amazonaws.com/lz/operations/aws-nuke:latest"
+    configuration_secret_name_prefix       = "/lz/services/nuke"
     lambda_architecture                    = "x86_64"
     lambda_memory_size                     = 512
     lambda_timeout                         = 600
-
-    secret_arns = {
-      "sandbox" = "arn:aws:secretsmanager:eu-west-1:123456789012:secret:nuke/sandbox-abc"
-      "dev"     = "arn:aws:secretsmanager:eu-west-1:123456789012:secret:nuke/dev-abc"
-    }
 
     tasks = {
       "sandbox" = {

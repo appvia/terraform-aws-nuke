@@ -3,7 +3,6 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-
 # Allow tests to run even when boto3 is not installed locally.
 sys.modules.setdefault("boto3", MagicMock())
 
@@ -14,17 +13,23 @@ class TestLambdaHandler(unittest.TestCase):
     def _base_event(self):
         return {
             "dry_run": True,
-            "secret_arn": "arn:aws:secretsmanager:eu-west-2:111111111111:secret:nuke",
+            "secret_name": "/lz/services/nuke/weekly-nuke",
             "sns_topic": None,
             "task_name": "weekly-nuke",
         }
 
     @patch("handler.subprocess.run")
     @patch("handler.boto3.client")
-    def test_success_dry_run_returns_success(self, mock_boto3_client, mock_subprocess_run):
+    def test_success_dry_run_returns_success(
+        self, mock_boto3_client, mock_subprocess_run
+    ):
         secrets_client = MagicMock()
-        secrets_client.get_secret_value.return_value = {"SecretString": "regions: [eu-west-2]"}
-        mock_boto3_client.side_effect = lambda service: secrets_client if service == "secretsmanager" else MagicMock()
+        secrets_client.get_secret_value.return_value = {
+            "SecretString": "regions: [eu-west-2]"
+        }
+        mock_boto3_client.side_effect = lambda service: (
+            secrets_client if service == "secretsmanager" else MagicMock()
+        )
         mock_subprocess_run.return_value = SimpleNamespace(
             stdout="would remove ec2-instance",
             stderr="",
@@ -33,21 +38,40 @@ class TestLambdaHandler(unittest.TestCase):
 
         result = handler.lambda_handler(self._base_event(), None)
 
-        self.assertEqual(result, {"action": "lambda_handler", "task_name": "weekly-nuke", "dry_run": True, "status": "success"})
+        self.assertEqual(
+            result,
+            {
+                "action": "lambda_handler",
+                "task_name": "weekly-nuke",
+                "dry_run": True,
+                "status": "success",
+            },
+        )
+        secrets_client.get_secret_value.assert_called_once_with(
+            SecretId="/lz/services/nuke/weekly-nuke"
+        )
         called_cmd = mock_subprocess_run.call_args.args[0]
         self.assertIn("/usr/local/bin/aws-nuke", called_cmd)
         self.assertNotIn("--no-dry-run", called_cmd)
 
     @patch("handler.subprocess.run")
     @patch("handler.boto3.client")
-    def test_non_dry_run_adds_no_dry_run_flag(self, mock_boto3_client, mock_subprocess_run):
+    def test_non_dry_run_adds_no_dry_run_flag(
+        self, mock_boto3_client, mock_subprocess_run
+    ):
         event = self._base_event()
         event["dry_run"] = False
 
         secrets_client = MagicMock()
-        secrets_client.get_secret_value.return_value = {"SecretString": "regions: [eu-west-2]"}
-        mock_boto3_client.side_effect = lambda service: secrets_client if service == "secretsmanager" else MagicMock()
-        mock_subprocess_run.return_value = SimpleNamespace(stdout="", stderr="", returncode=0)
+        secrets_client.get_secret_value.return_value = {
+            "SecretString": "regions: [eu-west-2]"
+        }
+        mock_boto3_client.side_effect = lambda service: (
+            secrets_client if service == "secretsmanager" else MagicMock()
+        )
+        mock_subprocess_run.return_value = SimpleNamespace(
+            stdout="", stderr="", returncode=0
+        )
 
         result = handler.lambda_handler(event, None)
 
@@ -57,12 +81,16 @@ class TestLambdaHandler(unittest.TestCase):
 
     @patch("handler.subprocess.run")
     @patch("handler.boto3.client")
-    def test_sns_publish_happens_when_would_remove_lines_exist(self, mock_boto3_client, mock_subprocess_run):
+    def test_sns_publish_happens_when_would_remove_lines_exist(
+        self, mock_boto3_client, mock_subprocess_run
+    ):
         event = self._base_event()
         event["sns_topic_arn"] = "arn:aws:sns:eu-west-2:111111111111:nuke-topic"
 
         secrets_client = MagicMock()
-        secrets_client.get_secret_value.return_value = {"SecretString": "regions: [eu-west-2]"}
+        secrets_client.get_secret_value.return_value = {
+            "SecretString": "regions: [eu-west-2]"
+        }
         sns_client = MagicMock()
 
         def boto3_client_side_effect(service):
@@ -90,11 +118,19 @@ class TestLambdaHandler(unittest.TestCase):
 
     @patch("handler.subprocess.run")
     @patch("handler.boto3.client")
-    def test_raises_runtime_error_when_nuke_fails(self, mock_boto3_client, mock_subprocess_run):
+    def test_raises_runtime_error_when_nuke_fails(
+        self, mock_boto3_client, mock_subprocess_run
+    ):
         secrets_client = MagicMock()
-        secrets_client.get_secret_value.return_value = {"SecretString": "regions: [eu-west-2]"}
-        mock_boto3_client.side_effect = lambda service: secrets_client if service == "secretsmanager" else MagicMock()
-        mock_subprocess_run.return_value = SimpleNamespace(stdout="boom", stderr="error", returncode=2)
+        secrets_client.get_secret_value.return_value = {
+            "SecretString": "regions: [eu-west-2]"
+        }
+        mock_boto3_client.side_effect = lambda service: (
+            secrets_client if service == "secretsmanager" else MagicMock()
+        )
+        mock_subprocess_run.return_value = SimpleNamespace(
+            stdout="boom", stderr="error", returncode=2
+        )
 
         with self.assertRaises(RuntimeError) as exc:
             handler.lambda_handler(self._base_event(), None)

@@ -19,6 +19,11 @@ variable "cloudwatch_log_group_retention_in_days" {
   type        = number
 }
 
+variable "configuration_secret_name_prefix" {
+  description = "The prefix used for AWS Secrets Manager task configuration secrets"
+  type        = string
+}
+
 variable "container_image" {
   description = "Optional Lambda-compatible container image URI to use for the nuke function (IMAGE:TAG)"
   type        = string
@@ -57,11 +62,6 @@ variable "name" {
 variable "region" {
   description = "The region to use for the resources"
   type        = string
-}
-
-variable "secret_arns" {
-  description = "A map of task name to the ARN of the SecretsManager secret holding the nuke configuration"
-  type        = map(string)
 }
 
 variable "tags" {

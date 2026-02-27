@@ -40,7 +40,15 @@ resource "aws_secretsmanager_secret" "configuration" {
   name                    = format("%s/%s", var.configuration_secret_name_prefix, each.key)
   recovery_window_in_days = 0
   tags                    = merge(var.tags, { "Name" = format("%s/%s", var.name, each.key) })
-  policy                  = data.aws_iam_policy_document.secrets_manager_secret.json
+}
+
+## Attach a resource policy to each secret
+resource "aws_secretsmanager_secret_policy" "configuration" {
+  for_each = var.tasks
+
+  secret_arn          = aws_secretsmanager_secret.configuration[each.key].arn
+  policy              = data.aws_iam_policy_document.secrets_manager_secret.json
+  block_public_policy = true
 }
 
 ## Provision a secret version for the configuration
@@ -84,13 +92,13 @@ module "lambda_nuke" {
   cloudwatch_log_group_class             = var.lambda.cloudwatch_log_group_class
   cloudwatch_log_group_kms_key_id        = try(module.kms[0].key_id, var.lambda.cloudwatch_log_group_kms_key_id)
   cloudwatch_log_group_retention_in_days = var.lambda.cloudwatch_log_group_retention_in_days
+  configuration_secret_name_prefix       = var.configuration_secret_name_prefix
   container_image                        = var.container_image
   lambda_architecture                    = var.lambda.architecture
   lambda_memory_size                     = var.lambda.memory_size
   lambda_timeout                         = var.lambda.timeout
   name                                   = var.name
   region                                 = var.region
-  secret_arns                            = local.secret_arns
   tags                                   = var.tags
   tasks                                  = var.tasks
 }
