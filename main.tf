@@ -1,18 +1,4 @@
-## Craft a policy document for the secrets manager secret to use
-data "aws_iam_policy_document" "secrets_manager_secret" {
-  statement {
-    sid     = "AllowSecretsManagerRead"
-    effect  = "Allow"
-    actions = ["secretsmanager:GetSecretValue"]
-    principals {
-      type        = "AWS"
-      identifiers = [format("arn:aws:iam::%s:root", var.account_id)]
-    }
-    resources = ["*"]
-  }
-}
-
-## Provision a KMS for the log group to use, if required 
+## Provision a KMS for the log group to use, if required
 module "kms" {
   count   = var.create_kms_key ? 1 : 0
   source  = "terraform-aws-modules/kms/aws"
@@ -30,7 +16,7 @@ module "kms" {
   tags                    = merge(var.tags, { "Name" = var.name })
 }
 
-## Place the configuration within the parameter store for the ecs task to access 
+## Place the configuration within the parameter store for the ecs task to access
 # trivy:ignore:AVD-AWS-0017
 # tfsec:ignore:aws-ssm-secret-use-customer-key
 resource "aws_secretsmanager_secret" "configuration" {
@@ -46,9 +32,22 @@ resource "aws_secretsmanager_secret" "configuration" {
 resource "aws_secretsmanager_secret_policy" "configuration" {
   for_each = var.tasks
 
-  secret_arn          = aws_secretsmanager_secret.configuration[each.key].arn
-  policy              = data.aws_iam_policy_document.secrets_manager_secret.json
-  block_public_policy = true
+  secret_arn = aws_secretsmanager_secret.configuration[each.key].arn
+
+  policy = jsondecode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowSecretsManagerRead"
+        Effect = "Allow"
+        Action = ["secretsmanager:GetSecretValue"]
+        Principal = {
+          AWS = [format("arn:aws:iam::%s:root", var.account_id)]
+        }
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 ## Provision a secret version for the configuration
