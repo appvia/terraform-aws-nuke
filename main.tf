@@ -105,6 +105,6 @@ module "lambda_nuke" {
   tasks                                  = var.tasks
 
   depends_on = [
-    aws_secretsmanager_secret.configuration
+    aws_secretsmanager_secret_policy.configuration,
   ]
 }
