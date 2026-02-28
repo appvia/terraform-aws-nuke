@@ -32,6 +32,11 @@ module "lambda_function" {
   timeout        = var.lambda_timeout
   image_uri      = var.container_image
 
+  ## Environment_variables
+  environment_variables = {
+    LOG_LEVEL = var.lambda_log_level
+  }
+
   ## Lambda Role
   create_role                   = true
   role_name                     = var.name

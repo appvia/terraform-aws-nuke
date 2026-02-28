@@ -15,7 +15,6 @@ run "ecs_single_task" {
     region     = "eu-west-1"
 
     assign_public_ip                       = false
-    cloudwatch_log_group_class             = "STANDARD"
     cloudwatch_log_group_kms_key_id        = null
     cloudwatch_log_group_prefix            = "/lz/services/nuke"
     cloudwatch_log_group_retention_in_days = 7
@@ -61,7 +60,6 @@ run "ecs_multi_task" {
     region     = "eu-west-1"
 
     assign_public_ip                       = false
-    cloudwatch_log_group_class             = "STANDARD"
     cloudwatch_log_group_kms_key_id        = null
     cloudwatch_log_group_prefix            = "/lz/services/nuke"
     cloudwatch_log_group_retention_in_days = 7
@@ -114,7 +112,6 @@ run "ecs_with_permission_boundary" {
     region     = "eu-west-1"
 
     assign_public_ip                       = false
-    cloudwatch_log_group_class             = "STANDARD"
     cloudwatch_log_group_kms_key_id        = null
     cloudwatch_log_group_prefix            = "/lz/services/nuke"
     cloudwatch_log_group_retention_in_days = 14

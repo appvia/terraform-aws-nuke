@@ -54,11 +54,6 @@ variable "cloudwatch_log_group_retention_in_days" {
   type        = number
 }
 
-variable "cloudwatch_log_group_class" {
-  description = "The class of the CloudWatch log group"
-  type        = string
-}
-
 variable "cloudwatch_log_group_kms_key_id" {
   description = "The KMS key id to use for encrypting the log group"
   type        = string

@@ -30,8 +30,6 @@ variable "ecs" {
     cloudwatch_log_group_prefix = optional(string, "/lz/services/nuke")
     ## The retention period for the CloudWatch log group (in days)
     cloudwatch_log_group_retention_in_days = optional(number, 7)
-    ## The class of the CloudWatch log group
-    cloudwatch_log_group_class = optional(string, "STANDARD")
     ## The KMS key id to use for encrypting the log group
     cloudwatch_log_group_kms_key_id = optional(string, null)
     ## The amount of memory to allocate to the container

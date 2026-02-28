@@ -65,7 +65,6 @@ module "ecs_nuke" {
 
   account_id                             = var.account_id
   assign_public_ip                       = var.ecs.assign_public_ip
-  cloudwatch_log_group_class             = var.ecs.cloudwatch_log_group_class
   cloudwatch_log_group_kms_key_id        = try(module.kms[0].key_id, var.ecs.cloudwatch_log_group_kms_key_id)
   cloudwatch_log_group_prefix            = var.ecs.cloudwatch_log_group_prefix
   cloudwatch_log_group_retention_in_days = var.ecs.cloudwatch_log_group_retention_in_days
@@ -80,6 +79,10 @@ module "ecs_nuke" {
   subnet_ids                             = var.ecs.subnet_ids
   tags                                   = var.tags
   tasks                                  = var.tasks
+
+  depends_on = [
+    aws_secretsmanager_secret.configuration
+  ]
 }
 
 ## Provision the Lambda function, if required
@@ -100,4 +103,8 @@ module "lambda_nuke" {
   region                                 = var.region
   tags                                   = var.tags
   tasks                                  = var.tasks
+
+  depends_on = [
+    aws_secretsmanager_secret.configuration
+  ]
 }

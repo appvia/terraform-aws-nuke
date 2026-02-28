@@ -1,9 +1,5 @@
 
 locals {
-  ## The local account id
-  account_id = var.account_id
-  ## The region the resources are being provisioned in
-  region = var.region
   ## A map of tasks with notifications enabled
   tasks_with_notifications = { for k, v in var.tasks : k => v if try(v.notifications.sns_topic_arn, null) != null }
   ## Collect all unique managed policy ARNs from all tasks to attach to the Lambda role
