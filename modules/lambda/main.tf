@@ -20,17 +20,18 @@ data "aws_iam_policy_document" "secrets_access" {
 ## A single function handles all tasks; per-task config is injected via EventBridge input.
 module "lambda_function" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.2.0"
+  version = "8.7.0"
 
   architectures  = [var.lambda_architecture]
   create_package = false
   description    = format("Runs the AWS Nuke within the account, for the %q task", var.name)
   function_name  = var.name
+  image_uri      = var.container_image
   memory_size    = var.lambda_memory_size
   package_type   = "Image"
+  region         = var.region
   tags           = merge(var.tags, { "Name" = var.name })
   timeout        = var.lambda_timeout
-  image_uri      = var.container_image
 
   ## Environment_variables
   environment_variables = {
