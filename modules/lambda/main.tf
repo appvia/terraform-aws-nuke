@@ -1,19 +1,24 @@
-## Build an inline IAM policy granting SecretsManager read access for all task configs.
-## The Lambda function reads nuke configuration from SecretsManager at invocation time.
-data "aws_iam_policy_document" "secrets_access" {
-  statement {
-    sid       = "AllowSecretsManagerRead"
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = [format("arn:aws:secretsmanager:%s:%s:secret:%s/*", var.region, var.account_id, var.configuration_secret_name_prefix)]
-  }
+locals {
+  ## Build an inline IAM policy granting SecretsManager read access for all task configs.
+  ## The Lambda function reads nuke configuration from SecretsManager at invocation time.
+  secrets_access_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "AllowSecretsManagerRead"
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue"]
+        Resource = [format("arn:aws:secretsmanager:%s:%s:secret:%s/*", var.region, var.account_id, var.configuration_secret_name_prefix)]
+      },
 
-  statement {
-    sid       = "AllowECRPull"
-    effect    = "Allow"
-    actions   = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"]
-    resources = ["*"]
-  }
+      {
+        Sid      = "AllowECRPull"
+        Effect   = "Allow"
+        Action   = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"]
+        Resource = ["*"]
+      }
+    ]
+  })
 }
 
 ## Lambda function that runs aws-nuke via a Lambda-compatible container image.
@@ -29,6 +34,7 @@ module "lambda_function" {
   image_uri      = var.container_image
   memory_size    = var.lambda_memory_size
   package_type   = "Image"
+  policy_json    = local.secrets_access_policy
   region         = var.region
   tags           = merge(var.tags, { "Name" = var.name })
   timeout        = var.lambda_timeout
@@ -51,7 +57,6 @@ module "lambda_function" {
   attach_network_policy         = false
   attach_cloudwatch_logs_policy = true
   attach_tracing_policy         = true
-  policy_json                   = data.aws_iam_policy_document.secrets_access.json
 
   ## Attach combined managed policy ARNs from all tasks (typically AdministratorAccess)
   attach_policies    = length(local.all_permission_arns) > 0

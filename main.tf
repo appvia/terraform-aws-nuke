@@ -106,11 +106,4 @@ module "lambda_nuke" {
   region                                 = var.region
   tags                                   = var.tags
   tasks                                  = var.tasks
-
-  depends_on = [
-    aws_secretsmanager_secret.configuration,
-    aws_secretsmanager_secret_policy.configuration,
-    aws_secretsmanager_secret_version.configuration,
-    module.kms,
-  ]
 }
