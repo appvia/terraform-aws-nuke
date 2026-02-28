@@ -81,7 +81,10 @@ module "ecs_nuke" {
   tasks                                  = var.tasks
 
   depends_on = [
-    aws_secretsmanager_secret.configuration
+    aws_secretsmanager_secret.configuration,
+    aws_secretsmanager_secret.configuration_policy,
+    aws_secretsmanager_secret_version.configuration,
+    module.kms,
   ]
 }
 
@@ -105,6 +108,9 @@ module "lambda_nuke" {
   tasks                                  = var.tasks
 
   depends_on = [
-    aws_secretsmanager_secret_policy.configuration,
+    aws_secretsmanager_secret.configuration,
+    aws_secretsmanager_secret.configuration_policy,
+    aws_secretsmanager_secret_version.configuration,
+    module.kms,
   ]
 }
