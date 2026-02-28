@@ -79,13 +79,6 @@ module "ecs_nuke" {
   subnet_ids                             = var.ecs.subnet_ids
   tags                                   = var.tags
   tasks                                  = var.tasks
-
-  depends_on = [
-    aws_secretsmanager_secret.configuration,
-    aws_secretsmanager_secret_policy.configuration,
-    aws_secretsmanager_secret_version.configuration,
-    module.kms,
-  ]
 }
 
 ## Provision the Lambda function, if required

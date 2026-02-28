@@ -16,6 +16,22 @@ locals {
         Effect   = "Allow"
         Action   = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"]
         Resource = ["*"]
+      },
+
+      {
+        Sid    = "AllowCloudWatchLogs",
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        # "arn:aws:logs:eu-west-2:192229180950:log-group:/aws/lambda/lz-nuke-eu-west-2:*"
+        # "arn:aws:logs:eu-west-2:192229180950:log-group:/aws/lambda/lz-nuke-eu-west-2:*:*",
+        Resource = [
+          format("arn:aws:logs:%s:%s:log-group:/aws/lambda/%s-%s:*", var.region, var.account_id, var.region, var.name),
+          format("arn:aws:logs:%s:%s:log-group:/aws/lambda/%s-%s:*:*", var.region, var.account_id, var.region, var.name)
+        ]
       }
     ]
   })
@@ -55,8 +71,8 @@ module "lambda_function" {
   ## Attach the SecretsManager read policy as an inline policy
   attach_policy_json            = true
   attach_network_policy         = false
-  attach_cloudwatch_logs_policy = true
-  attach_tracing_policy         = true
+  attach_cloudwatch_logs_policy = false
+  attach_tracing_policy         = false
 
   ## Attach combined managed policy ARNs from all tasks (typically AdministratorAccess)
   attach_policies    = length(local.all_permission_arns) > 0
