@@ -5,7 +5,7 @@ ARG NUKE_TAG=v3.26.0-2-g672408a-amd64
 
 FROM ${NUKE_IMAGE}:${NUKE_TAG} AS nuke
 # Pull the Python 3.12 Lambda image
-FROM public.ecr.aws/lambda/python:3.12
+FROM public.ecr.aws/lambda/python:3.14
 # Copy the aws-nuke binary from the container image
 COPY --from=nuke /usr/local/bin/aws-nuke /usr/local/bin/aws-nuke
 # Copy the Lambda handler
