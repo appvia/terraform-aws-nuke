@@ -36,7 +36,8 @@ module "nuke" {
   tags = local.tags
   ## Configure Lambda as the compute backend.
   lambda = {
-    # The architecture to use for the Lambda function
+    # The architecture must match the DOCKER_PLATFORM used to build the container image.
+    # Makefile default is linux/amd64, which corresponds to x86_64.
     architecture = "x86_64"
     # The memory size to use for the Lambda function
     memory_size = 256
