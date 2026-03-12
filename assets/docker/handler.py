@@ -82,6 +82,12 @@ def lambda_handler(event, context):
     # Set the log level for this module to the value of the LOG_LEVEL environment variable
     logger.setLevel(log_level)
 
+    if not secret_name:
+        raise ValueError(
+            "Event must include a non-empty 'secret_name' or 'secret_arn' key "
+            "containing the Secrets Manager secret ID or ARN for the aws-nuke config."
+        )
+
     logger.info(
         "Starting execution of aws-nuke",
         extra={

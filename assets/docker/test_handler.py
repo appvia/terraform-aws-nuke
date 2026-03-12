@@ -116,6 +116,37 @@ class TestLambdaHandler(unittest.TestCase):
         self.assertIn("would remove ec2", kwargs["Message"])
         self.assertIn("would remove s3-bucket", kwargs["Message"])
 
+    def test_raises_value_error_when_secret_name_missing(self):
+        """Lambda must raise ValueError immediately when no secret identifier is supplied."""
+        event = {
+            "dry_run": True,
+            "task_name": "dry-run",
+            # Deliberately omit 'secret_name' and 'secret_arn'
+        }
+        with self.assertRaises(ValueError) as exc:
+            handler.lambda_handler(event, None)
+        self.assertIn("secret_name", str(exc.exception))
+
+    def test_raises_value_error_when_secret_name_is_none(self):
+        """Lambda must raise ValueError when secret_name is explicitly None."""
+        event = {
+            "dry_run": True,
+            "secret_name": None,
+            "task_name": "dry-run",
+        }
+        with self.assertRaises(ValueError):
+            handler.lambda_handler(event, None)
+
+    def test_raises_value_error_when_secret_arn_is_none(self):
+        """Lambda must raise ValueError when both secret_name and secret_arn are None."""
+        event = {
+            "dry_run": True,
+            "secret_arn": None,
+            "task_name": "dry-run",
+        }
+        with self.assertRaises(ValueError):
+            handler.lambda_handler(event, None)
+
     @patch("handler.subprocess.run")
     @patch("handler.boto3.client")
     def test_raises_runtime_error_when_nuke_fails(
