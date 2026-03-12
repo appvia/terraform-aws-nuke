@@ -33,7 +33,7 @@ variable "container_image" {
 variable "lambda_architecture" {
   description = "The architecture to use for the Lambda function - must match the platform the container image was built for"
   type        = string
-  default     = "x86_64"
+  default     = "arm64"
 }
 
 variable "lambda_log_level" {

@@ -16,9 +16,9 @@
 
 AWS_ECR_REGION ?= eu-west-2
 DOCKER_IMAGE ?= 676206913132.dkr.ecr.${AWS_ECR_REGION}.amazonaws.com/lz/services/nuke
-DOCKER_PLATFORM ?= linux/amd64
+DOCKER_PLATFORM ?= linux/arm64
 NUKE_IMAGE ?= ghcr.io/ekristen/aws-nuke
-NUKE_TAG ?= v3.63.4-10-g985b49c-amd64
+NUKE_TAG ?= v3.64.0-4-gadaabe0-arm64
 
 default: all
 

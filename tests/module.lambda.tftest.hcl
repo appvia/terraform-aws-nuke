@@ -94,7 +94,7 @@ run "lambda_multi_task" {
     cloudwatch_log_group_retention_in_days = 7
     container_image                        = "123456789012.dkr.ecr.eu-west-1.amazonaws.com/lz/operations/aws-nuke:latest"
     configuration_secret_name_prefix       = "/lz/services/nuke"
-    lambda_architecture                    = "x86_64"
+    lambda_architecture                    = "arm64"
     lambda_memory_size                     = 512
     lambda_timeout                         = 600
 

@@ -48,8 +48,8 @@ variable "lambda" {
   description = "Indicates if the Lambda function should be created"
   type = object({
     # The architecture to use for the Lambda function - must match the DOCKER_PLATFORM used when
-    # building the container image (Makefile default: linux/amd64 => x86_64)
-    architecture = optional(string, "x86_64")
+    # building the container image
+    architecture = optional(string, "arm64")
     # The memory size to use for the Lambda function
     memory_size = optional(number, 256)
     # The timeout to use for the Lambda function

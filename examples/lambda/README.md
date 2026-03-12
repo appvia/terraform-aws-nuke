@@ -8,7 +8,7 @@ Lambda mode requires a Lambda-compatible wrapper image. See the root [README](..
 
 ## Features
 
-- **Lambda compute backend** -- runs aws-nuke as a container-image Lambda function with configurable architecture (`x86_64` in this example), memory, and timeout.
+- **Lambda compute backend** -- runs aws-nuke as a container-image Lambda function with configurable architecture (`arm64` in this example), memory, and timeout.
 - **Dry-run with notification** (`dry-run`) -- runs every Monday at 09:00 UTC, reports what would be deleted, and publishes results to an SNS topic.
 - **Custom container image** -- the `container_image` variable allows you to point at your own ECR-hosted Lambda wrapper image.
 
@@ -67,3 +67,4 @@ module "nuke" {
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | The name of the Lambda function running nuke tasks, if serverless mode is enabled |
 | <a name="output_secret_arns"></a> [secret\_arns](#output\_secret\_arns) | A map of task name to the ARN of the SecretsManager secret holding the nuke configuration |
 <!-- END_TF_DOCS -->
+
