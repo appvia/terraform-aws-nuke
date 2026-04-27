@@ -41,7 +41,7 @@ locals {
 ## A single function handles all tasks; per-task config is injected via EventBridge input.
 module "lambda_function" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.7.0"
+  version = "8.8.0"
 
   architectures  = [var.lambda_architecture]
   create_package = false
