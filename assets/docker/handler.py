@@ -77,9 +77,10 @@ def lambda_handler(event, context):
     secret_name = event.get("secret_name") or event.get("secret_arn")
     sns_topic = event.get("sns_topic_arn") or None
     task_name = event.get("task_name")
-    log_level = os.environ.get("LOG_LEVEL", "DEBUG").upper()
+    log_level = (event.get("debug") or os.environ.get("LOG_LEVEL", "DEBUG")).upper()
 
-    # Set the log level for this module to the value of the LOG_LEVEL environment variable
+    # Set the log level for this module to the value of the LOG_LEVEL
+    # environment variable
     logger.setLevel(log_level)
 
     if not secret_name:
@@ -127,29 +128,83 @@ def lambda_handler(event, context):
     if not dry_run:
         cmd.append("--no-dry-run")
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
     logger.info(
-        "aws-nuke command completed",
+        "Executing aws-nuke command",
         extra={
             "action": "lambda_handler",
-            "task_name": task_name,
-            "return_code": result.returncode,
+            "command": " ".join(cmd),
+            "args": cmd,
         },
     )
-    if result.stderr:
-        logger.error(
-            "aws-nuke command failed",
+
+    stdout_output = []
+    stderr_output = []
+
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=3600,
+        )
+
+        stdout_output = result.stdout.splitlines() if result.stdout else []
+        stderr_output = result.stderr.splitlines() if result.stderr else []
+
+        for line in stdout_output:
+            logger.debug(
+                "aws-nuke stdout",
+                extra={
+                    "action": "lambda_handler",
+                    "output": line,
+                },
+            )
+
+        if stderr_output:
+            for line in stderr_output:
+                logger.warning(
+                    "aws-nuke stderr",
+                    extra={
+                        "action": "lambda_handler",
+                        "output": line,
+                    },
+                )
+
+        logger.info(
+            "aws-nuke command completed",
             extra={
                 "action": "lambda_handler",
                 "task_name": task_name,
-                "stderr": result.stderr,
+                "return_code": result.returncode,
+                "stdout_lines": len(stdout_output),
+                "stderr_lines": len(stderr_output),
             },
         )
 
+    except subprocess.TimeoutExpired:
+        logger.error(
+            "aws-nuke command timed out",
+            extra={
+                "action": "lambda_handler",
+                "task_name": task_name,
+                "timeout_seconds": 3600,
+            },
+        )
+        raise RuntimeError("aws-nuke command timed out after 3600 seconds")
+    except Exception as e:
+        logger.error(
+            "aws-nuke command execution error",
+            extra={
+                "action": "lambda_handler",
+                "task_name": task_name,
+                "error": str(e),
+            },
+            exc_info=True,
+        )
+        raise
+
     if sns_topic and result.returncode == 0:
-        would_remove = [
-            line for line in result.stdout.splitlines() if "would remove" in line
-        ]
+        would_remove = [line for line in stdout_output if "would remove" in line]
         if would_remove:
             boto3.client("sns").publish(
                 TopicArn=sns_topic,
@@ -164,9 +219,18 @@ def lambda_handler(event, context):
                 "action": "lambda_handler",
                 "task_name": task_name,
                 "return_code": result.returncode,
+                "full_stdout": (
+                    "\n".join(stdout_output) if stdout_output else "No output"
+                ),
+                "full_stderr": (
+                    "\n".join(stderr_output) if stderr_output else "No errors"
+                ),
             },
         )
-        raise RuntimeError(f"aws-nuke exited with code {result.returncode}")
+        raise RuntimeError(
+            f"aws-nuke exited with code {result.returncode}\n"
+            f"stderr: {chr(10).join(stderr_output) if stderr_output else 'No errors'}"
+        )
 
     return {
         "action": "lambda_handler",
