@@ -133,7 +133,7 @@ def lambda_handler(event, context):
         extra={
             "action": "lambda_handler",
             "command": " ".join(cmd),
-            "args": cmd,
+            "command_args": cmd,
         },
     )
 
