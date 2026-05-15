@@ -77,7 +77,7 @@ def lambda_handler(event, context):
     secret_name = event.get("secret_name") or event.get("secret_arn")
     sns_topic = event.get("sns_topic_arn") or None
     task_name = event.get("task_name")
-    log_level = (event.get("debug") or os.environ.get("LOG_LEVEL", "DEBUG")).upper()
+    log_level = ("DEBUG" if event.get("debug") else os.environ.get("LOG_LEVEL", "DEBUG")).upper()
 
     # Set the log level for this module to the value of the LOG_LEVEL
     # environment variable
@@ -152,7 +152,7 @@ def lambda_handler(event, context):
         stderr_output = result.stderr.splitlines() if result.stderr else []
 
         for line in stdout_output:
-            logger.debug(
+            logger.info(
                 "aws-nuke stdout",
                 extra={
                     "action": "lambda_handler",
@@ -170,12 +170,16 @@ def lambda_handler(event, context):
                     },
                 )
 
+        # Determine if process was killed by signal (negative return code)
+        signal_num = -result.returncode if result.returncode < 0 else None
+
         logger.info(
             "aws-nuke command completed",
             extra={
                 "action": "lambda_handler",
                 "task_name": task_name,
                 "return_code": result.returncode,
+                "signal_number": signal_num,
                 "stdout_lines": len(stdout_output),
                 "stderr_lines": len(stderr_output),
             },
@@ -213,12 +217,17 @@ def lambda_handler(event, context):
             )
 
     if result.returncode != 0:
+        signal_info = ""
+        if result.returncode < 0:
+            signal_info = f" (killed by signal {-result.returncode})"
+        
         logger.error(
             "aws-nuke command failed",
             extra={
                 "action": "lambda_handler",
                 "task_name": task_name,
                 "return_code": result.returncode,
+                "signal_number": -result.returncode if result.returncode < 0 else None,
                 "full_stdout": (
                     "\n".join(stdout_output) if stdout_output else "No output"
                 ),
@@ -228,7 +237,7 @@ def lambda_handler(event, context):
             },
         )
         raise RuntimeError(
-            f"aws-nuke exited with code {result.returncode}\n"
+            f"aws-nuke exited with code {result.returncode}{signal_info}\n"
             f"stderr: {chr(10).join(stderr_output) if stderr_output else 'No errors'}"
         )
 

@@ -18,7 +18,8 @@ AWS_ECR_REGION ?= eu-west-2
 DOCKER_IMAGE ?= 676206913132.dkr.ecr.${AWS_ECR_REGION}.amazonaws.com/lz/services/nuke
 DOCKER_PLATFORM ?= linux/arm64
 NUKE_IMAGE ?= ghcr.io/ekristen/aws-nuke
-NUKE_TAG ?= v3.64.0-4-gadaabe0-arm64
+NUKE_TAG ?= v3.64.1-26-g7e3e3d9-arm64
+DOCKER_TAG ?= $(NUKE_TAG)
 
 default: all
 
@@ -72,14 +73,14 @@ docker-ecr-image:
 	--platform ${DOCKER_PLATFORM} \
 	--provenance=false \
 	--sbom=false \
-	-t ${DOCKER_IMAGE}:${NUKE_TAG} \
+	-t ${DOCKER_IMAGE}:${DOCKER_TAG} \
 	-f assets/docker/Dockerfile assets/docker
-	@echo "--> successfully built the image: ${DOCKER_IMAGE}:${NUKE_TAG}"
+	@echo "--> successfully built the image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
 
 docker-ecr-image-push:
 	@$(MAKE) docker-ecr-image
 	@echo "--> Pushing the Lambda compatible docker image"
-	@docker push ${DOCKER_IMAGE}:${NUKE_TAG}
+	@docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
 
 upgrade-terraform-providers:
 	@printf "%s Upgrading Terraform providers for %-24s" "-->" "."
