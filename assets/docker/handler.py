@@ -8,6 +8,7 @@ import tempfile
 import os
 import logging
 import json
+import threading
 from typing import Any
 
 # Default logger for all log messages in this module, configured to emit JSON-formatted logs to stdout.
@@ -70,6 +71,34 @@ _handler = logging.StreamHandler()
 _handler.setFormatter(_JSONFormatter())
 logger.handlers = [_handler]
 logger.propagate = False
+
+
+def _stream_output(pipe, is_stderr=False):
+    """Stream output from a pipe line-by-line to the logger."""
+    output_lines = []
+    if pipe is None:
+        return output_lines
+    
+    for line in iter(pipe.readline, ""):
+        if line:
+            output_lines.append(line.rstrip())
+            if is_stderr:
+                logger.warning(
+                    "aws-nuke stderr",
+                    extra={
+                        "action": "lambda_handler",
+                        "output": line.rstrip(),
+                    },
+                )
+            else:
+                logger.info(
+                    "aws-nuke stdout",
+                    extra={
+                        "action": "lambda_handler",
+                        "output": line.rstrip(),
+                    },
+                )
+    return output_lines
 
 
 def lambda_handler(event, context):
@@ -141,44 +170,45 @@ def lambda_handler(event, context):
     stderr_output = []
 
     try:
-        result = subprocess.run(
+        process = subprocess.Popen(
             cmd,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             text=True,
-            timeout=3600,
+            bufsize=1,
         )
 
-        stdout_output = result.stdout.splitlines() if result.stdout else []
-        stderr_output = result.stderr.splitlines() if result.stderr else []
-
-        for line in stdout_output:
-            logger.info(
-                "aws-nuke stdout",
-                extra={
-                    "action": "lambda_handler",
-                    "output": line,
-                },
+        try:
+            stdout_thread = threading.Thread(
+                target=lambda: stdout_output.extend(_stream_output(process.stdout, is_stderr=False))
             )
-
-        if stderr_output:
-            for line in stderr_output:
-                logger.warning(
-                    "aws-nuke stderr",
-                    extra={
-                        "action": "lambda_handler",
-                        "output": line,
-                    },
-                )
+            stderr_thread = threading.Thread(
+                target=lambda: stderr_output.extend(_stream_output(process.stderr, is_stderr=True))
+            )
+            
+            stdout_thread.start()
+            stderr_thread.start()
+            
+            return_code = process.wait(timeout=3600)
+            
+            stdout_thread.join()
+            stderr_thread.join()
+            
+            process.returncode = return_code
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+            raise
 
         # Determine if process was killed by signal (negative return code)
-        signal_num = -result.returncode if result.returncode < 0 else None
+        signal_num = -process.returncode if process.returncode < 0 else None
 
         logger.info(
             "aws-nuke command completed",
             extra={
                 "action": "lambda_handler",
                 "task_name": task_name,
-                "return_code": result.returncode,
+                "return_code": process.returncode,
                 "signal_number": signal_num,
                 "stdout_lines": len(stdout_output),
                 "stderr_lines": len(stderr_output),
@@ -207,7 +237,7 @@ def lambda_handler(event, context):
         )
         raise
 
-    if sns_topic and result.returncode == 0:
+    if sns_topic and process.returncode == 0:
         would_remove = [line for line in stdout_output if "would remove" in line]
         if would_remove:
             boto3.client("sns").publish(
@@ -216,18 +246,18 @@ def lambda_handler(event, context):
                 Message="\n".join(would_remove),
             )
 
-    if result.returncode != 0:
+    if process.returncode != 0:
         signal_info = ""
-        if result.returncode < 0:
-            signal_info = f" (killed by signal {-result.returncode})"
+        if process.returncode < 0:
+            signal_info = f" (killed by signal {-process.returncode})"
         
         logger.error(
             "aws-nuke command failed",
             extra={
                 "action": "lambda_handler",
                 "task_name": task_name,
-                "return_code": result.returncode,
-                "signal_number": -result.returncode if result.returncode < 0 else None,
+                "return_code": process.returncode,
+                "signal_number": -process.returncode if process.returncode < 0 else None,
                 "full_stdout": (
                     "\n".join(stdout_output) if stdout_output else "No output"
                 ),
@@ -237,7 +267,7 @@ def lambda_handler(event, context):
             },
         )
         raise RuntimeError(
-            f"aws-nuke exited with code {result.returncode}{signal_info}\n"
+            f"aws-nuke exited with code {process.returncode}{signal_info}\n"
             f"stderr: {chr(10).join(stderr_output) if stderr_output else 'No errors'}"
         )
 
