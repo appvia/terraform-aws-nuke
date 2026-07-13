@@ -5,7 +5,7 @@ ARG NUKE_TAG=v3.65.0
 
 FROM ${NUKE_IMAGE}:${NUKE_TAG} AS nuke
 # Pull the Python 3.14 Lambda image
-FROM public.ecr.aws/lambda/python:3.14
+FROM public.ecr.aws/lambda/python:3.15
 
 # Copy the aws-nuke binary from the nuke container image
 COPY --from=nuke /usr/local/bin/aws-nuke /usr/local/bin/aws-nuke
