@@ -2,7 +2,7 @@
 module "kms" {
   count   = var.create_kms_key ? 1 : 0
   source  = "terraform-aws-modules/kms/aws"
-  version = "4.2.0"
+  version = "4.2.1"
 
   aliases                 = [var.name]
   deletion_window_in_days = 7
