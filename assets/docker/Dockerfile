@@ -1,7 +1,7 @@
 # The image to use for the aws-nuke container
 ARG NUKE_IMAGE=ghcr.io/ekristen/aws-nuke
 # The tag of the aws-nuke image to use
-ARG NUKE_TAG=v3.68.3
+ARG NUKE_TAG=v3.69.1
 
 FROM ${NUKE_IMAGE}:${NUKE_TAG} AS nuke
 # Pull the Python 3.14 Lambda image
